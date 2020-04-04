@@ -1,0 +1,32 @@
+@import "func";
+
+.rotate_180 {
+  transform: rotate(180deg);
+}
+
+.rotate_90 {
+  transform: rotate(90deg);
+}
+
+.rotate_-90 {
+  transform: rotate(-90deg);
+}
+
+.rotate_270 {
+  transform: rotate(270deg);
+}
+
+.icon_login_bg {
+  width: pr(492);
+  height: pr(500);
+}
+
+.logo {
+  width: pr(46);
+  height: pr(46);
+}
+
+.icon_login {
+  width: pr(439);
+  height: pr(307);
+}

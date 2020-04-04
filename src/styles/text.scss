@@ -1,0 +1,198 @@
+@font-face {
+  font-family: AlibabaPuHuiTiR;
+  src: url('https://devoss.ddwenwen.com/agent_pc/Alibaba-PuHuiTi-Regular.ttf');
+}
+
+@font-face {
+  font-family: AlibabaPuHuiTiM;
+  src: url('https://devoss.ddwenwen.com/agent_pc/Alibaba-PuHuiTi-Medium.ttf');
+}
+
+@font-face {
+  font-family: AlibabaPuHuiTiL;
+  src: url('https://devoss.ddwenwen.com/agent_pc/Alibaba-PuHuiTi-Light.ttf');
+}
+
+@font-face {
+  font-family: AlibabaPuHuiTiB;
+  src: url('https://devoss.ddwenwen.com/agent_pc/Alibaba-PuHuiTi-Bold.ttf');
+}
+
+
+/** 文本 **/
+.text_140 {
+  font-size: pr(140);
+}
+
+.text_62 {
+  font-size: pr(62);
+}
+
+.text_60 {
+  font-size: pr(60);
+}
+
+.text_56 {
+  font-size: pr(56);
+}
+
+.text_52 {
+  font-size: pr(52);
+}
+
+.text_44 {
+  font-size: pr(44);
+}
+
+.text_46 {
+  color: #333333;
+}
+
+.text_42 {
+  font-size: pr(42);
+}
+
+.text_40 {
+  font-size: pr(40);
+}
+
+.text_38 {
+
+  font-size: pr(38);
+}
+
+.text_36 {
+  font-size: pr(36);
+}
+
+.text_34 {
+  font-size: pr(34);
+}
+
+.text_32 {
+  font-size: pr(32);
+}
+
+.text_30 {
+  font-size: pr(30);
+}
+
+.text_28 {
+  font-size: pr(28);
+}
+
+.text_28_force {
+  font-size: pr(28) !important;
+}
+
+.text_26 {
+  font-size: pr(26);
+}
+
+.text_24 {
+  font-size: pr(24);
+}
+
+.text_24_force {
+  font-size: pr(24) !important;
+
+}
+
+.text_22 {
+  font-size: pr(22);
+
+}
+
+.text_20 {
+  font-size: pr(24);
+  transform: scale(0.833);
+}
+
+.text_18 {
+  font-size: pr(18);
+
+}
+
+.text_16 {
+  font-size: pr(16);
+}
+
+.text_14 {
+  font-size: pr(14);
+}
+
+.text_12 {
+  font-size: pr(12);
+
+}
+
+.regular {
+  font-family: AlibabaPuHuiTiR, PingFangSC, sans-serif !important;
+}
+
+.light {
+  font-family: AlibabaPuHuiTiL, PingFangSC, sans-serif !important;
+}
+
+.mid {
+  font-family: AlibabaPuHuiTiM, PingFangSC, sans-serif !important;
+}
+
+.bold {
+  font-family: AlibabaPuHuiTiB, PingFangSC, sans-serif !important;
+}
+
+.normal {
+  font-weight: normal;
+}
+
+
+.text_line_1 {
+  position: relative;
+  white-space: nowrap;
+  //display: -webkit-box;
+  //-webkit-line-clamp: 1;
+  //-webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.text_line_1:after {
+  //content: "...";
+  position: absolute;
+  right: 0.1rem;
+  top: 0;
+  display: inline-block;
+}
+
+.text_line_2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.text_line_3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.text_line_4 {
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.text_line_10 {
+  display: -webkit-box;
+  -webkit-line-clamp: 10;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
