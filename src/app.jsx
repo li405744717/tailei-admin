@@ -62,7 +62,7 @@ export default class App extends React.Component {
     })
     const navBarTitle = curRouteItem ? curRouteItem.title : '404'
     const pathSnippets = _originPathName.split('/').filter(i => i);
-    // console.log('pathSnippets', pathSnippets)
+    console.log('pathSnippets', pathSnippets)
     const extraBreadcrumbItems = pathSnippets.map((_, index) => {
       const url = `/${pathSnippets.slice(0, index + 1).join('/')}`;
       var routeItem = routerMap.find(item => {
@@ -72,20 +72,16 @@ export default class App extends React.Component {
         routeItem ?
           <Breadcrumb.Item key={url}>
             {
-              routeItem.C && index != pathSnippets.length - 1 ?
+              routeItem.C ?
                 <Link to={routeItem.path}>
-                  <span className="text_24 black">{routeItem.title}</span>
+                  <span className="text_12 black">{routeItem.title}</span>
                 </Link> :
-                <span className="text_24 gray">{routeItem.title}</span>
+                <span className="text_12 gray">{routeItem.title}</span>
             }
           </Breadcrumb.Item> : null
       );
     });
-    const breadcrumbItems = [
-      <Breadcrumb.Item key="home">
-        <Link to="/">首页</Link>
-      </Breadcrumb.Item>
-    ].concat(extraBreadcrumbItems);
+    const breadcrumbItems = [].concat(extraBreadcrumbItems);
 
     return (<div className="flex_column app_container" id="app">
       <NavBar title={navBarTitle}/>

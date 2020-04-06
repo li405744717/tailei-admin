@@ -1,0 +1,197 @@
+@import "@/func";
+
+.line_item {
+  border-bottom: 1px solid rgba(240, 240, 240, 0.5)
+}
+
+.line_item:last-child {
+  border-bottom: none
+}
+
+.listHeader {
+  background-color: #FAFAFA
+}
+
+.table_item {
+  justify-content: center;
+  span {
+    width: fit-content;
+  }
+}
+
+.table_item:first-child {
+  justify-content: flex-start;
+}
+
+.table_item:last-child {
+  justify-content: flex-end;
+}
+
+.table_fund_type {
+  padding: pr(0) pr(4);
+  border: 1px solid #90AAD2;
+  border-radius: pr(4);
+  color: #90AAD2 !important;
+}
+
+.padding_TB_100 {
+  padding-top: pr(100);
+  padding-bottom: pr(100)
+}
+
+.comb_scan_card_header_c {
+  border-bottom: pr(1) solid #EBEBEB;
+}
+
+.comb_scan_card_header_title_max {
+  max-width: pr(450);
+}
+
+.comb_scan_card_status_c {
+  width: pr(32);
+  height: pr(32);
+  border-radius: 50%;
+}
+
+.comb_scan_card_status_c_success {
+  width: pr(32);
+  height: pr(32);
+  box-shadow: 0 pr(4) pr(16) 0 rgba(115, 214, 121, 0.3);
+  border-radius: 50%;
+}
+
+.comb_scan_card_status_c_error {
+  width: pr(32);
+  height: pr(32);
+  box-shadow: 0 pr(4) pr(16) 0 rgba(245, 143, 92, 0.3);
+  border-radius: 50%;
+}
+
+.comb_scan_card_status_c_warning {
+  width: pr(32);
+  height: pr(32);
+  box-shadow: 0 pr(4) pr(16) 0 rgba(247, 185, 84, 0.3);
+  border-radius: 50%;
+}
+
+.comb_scan_blue_tag_c {
+  padding: pr(2) pr(8);
+  border-radius: pr(4);
+  background: #eaf1fe;
+}
+
+.comb_scan_blue_tag_text_c {
+  color: #4786f7 !important
+}
+
+.comb_scan_gold_tag_c {
+  padding: pr(2) pr(8);
+  border-radius: pr(4);
+  background: #fff8eb;
+}
+
+.comb_scan_gold_tag_text_c {
+  color: #dba851 !important
+}
+
+.comb_scan_card_index_list_c :first-child {
+  align-items: flex-start;
+}
+
+.comb_scan_card_index_list_c :nth-child(n+2) {
+  align-items: center;
+}
+
+.comb_scan_card_index_list_c :last-child {
+  align-items: flex-end;
+}
+
+.comb_scan_card_container_back_white_c {
+  background-color: white;
+}
+
+.comb_scan_card_container_back_warning_c {
+  background-color: rgba(255, 245, 228, 1);
+}
+
+.comb_scan_card_container_back_error_c {
+  background-color: rgba(255, 243, 236, 1);
+}
+
+.comb_scan_card_container_c {
+  box-shadow: 0 pr(4) pr(32) 0 rgba(186, 191, 197, 0.2);
+  border-radius: pr(20);
+  z-index: 3;
+}
+
+.comb_scan_card_status_prompt_c {
+  width: pr(24);
+  height: pr(24)
+}
+
+.comb_scan_card_text_prompt_c_success {
+  color: #4FA16C !important
+}
+
+.comb_scan_card_text_prompt_c_error {
+  color: #EF7133 !important
+}
+
+.comb_scan_card_text_prompt_c_warning {
+  color: #EAA027 !important
+}
+
+.comb_scan_card_text_prompt_container {
+  margin-right: pr(12);
+  //width: 33%;
+}
+
+.comb_scan_card_text_prompt_container:nth-child(3n) {
+  margin-right: pr(0);
+}
+
+.diagnose_table {
+  .fund_code_text {
+    width: pr(80);
+  }
+
+  .ant-table-row-cell-break-word:first-child {
+    span {
+      text-align: left;
+    }
+  }
+
+  .ant-table-thead {
+    tr {
+      th:first-child {
+        span {
+          text-align: left;
+        }
+      }
+    }
+  }
+
+  .ant-table-header-column {
+    width: 100%;
+    text-align: center;
+  }
+
+  .ant-table-column-sorters {
+    display: flex !important;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .ant-table-row-cell-last {
+    span {
+      width: 100%;
+      text-align: right;
+    }
+
+    .ant-table-column-sorters {
+      display: table !important;
+    }
+  }
+
+}

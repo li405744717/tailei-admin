@@ -14,6 +14,8 @@ const loadable = (loader, loading = loadingComponent) => {
   });
 }
 
+const HouseScaleList = loadable(() => import('@/pages/house-sale/list/c'))
+const HouseScaleInfo = loadable(() => import('@/pages/house-sale/info/c'))
 
 
 export const routerList = [
@@ -22,10 +24,19 @@ export const routerList = [
     path: '/',
   },
   {
-    title: '公募工作台',
+    title: '房屋租赁管理',
     path: '/home',
     children: [
-
+      {
+        title: '租聘列表',
+        path: '/home/house-sale',
+        C: HouseScaleList
+      },
+      {
+        title: '租聘信息',
+        path: '/home/house-sale/:code',
+        C: HouseScaleInfo
+      }
     ]
   }
 ]
