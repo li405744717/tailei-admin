@@ -74,9 +74,9 @@ export default class App extends React.Component {
             {
               routeItem.C ?
                 <Link to={routeItem.path}>
-                  <span className="text_12 black">{routeItem.title}</span>
+                  <span className="text_24 black">{routeItem.title}</span>
                 </Link> :
-                <span className="text_12 gray">{routeItem.title}</span>
+                <span className="text_24 gray">{routeItem.title}</span>
             }
           </Breadcrumb.Item> : null
       );

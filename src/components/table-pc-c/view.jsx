@@ -1,13 +1,12 @@
 import * as React from "react";
 import filter from '@/common/filters'
-import CusTitle from '@/components/title-c/c'
 import ExplainC from "../explain/explain";
 import EmptyC from "../empty-c/empty-c";
 import {Table} from 'antd'
 
 export default function renderView(page) {
   const {hideFg, explain, explainTop, left, showAll} = page.state
-  var {chart, columnRenderObj, emptyText} = page.props
+  var {chart, columnRenderObj, emptyText, rowSelection} = page.props
   var {showHeader} = page.props
   const slotKeys = ['before', 'title_before', 'middle', 'after', "title_after", "tag"]
   var slotObj = filter.formatSlot(slotKeys, page)
@@ -94,7 +93,7 @@ export default function renderView(page) {
       renderMap[section.renderId] ? renderMap[section.renderId] :
         (content, record, rowIndex) => {
           return <div onClick={(e) => page.click({rowIndex}, e)} key={`row_${rowIndex}`}
-                      className={`${section.styleClass || 'flex_1'} table_item ${content.direction == 'row' ? `flex_row align_center ${content.last ? 'justify_end' : content.first ? 'justify_start' : 'justify_center'}` : `flex_column justify_center ${content.last ? 'align_end' : content.first ? 'align_start' : 'align_center'}`}`}>
+                      className={`${section.styleClass || 'flex_1'} table_item ${content.direction == 'row' ? `flex_row align_center ${content.last ? 'justify_end' : content.first ? 'justify_start' : 'justify_start'}` : `flex_column justify_center ${content.last ? 'align_end' : content.first ? 'align_start' : 'align_start'}`}`}>
             {
               content.data.map((data, itemIndex) => {
                 var len = content.data.length
@@ -145,19 +144,6 @@ export default function renderView(page) {
         <div
           className={`flex_column ${chart.top_border ? 'border_top' : ''} border_bottom ${!chart.bottom_border ? '' : ''}`}>
 
-          {
-            chart.header ?
-              <CusTitle title={chart.header.title} subTitle={chart.header.subTitle}>
-                <div ref="before">
-                  {slotObj.title_before}
-                </div>
-                z
-                <div ref="after">
-                  {slotObj.title_after}
-                </div>
-              </CusTitle> : null
-          }
-
           {slotObj.middle}
 
           {
@@ -170,6 +156,7 @@ export default function renderView(page) {
                          onMouseLeave: event => page.onRow("onMouseLeave", {})
                        };
                      }}
+                     rowSelection={rowSelection}
                      showHeader={showHeader}/> : null
           }
 

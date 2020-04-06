@@ -67,11 +67,11 @@ textarea {
   word-wrap: break-word;
   word-break: break-all;
   font-family: DinProR, AlibabaPuHuiTiR, PingFangSC, sans-serif !important;
-  font-size: pr(14);
+  font-size: pr(28);
 }
 
 span {
-  color: rgba(0, 0, 0, 0.85);
+  color: rgba(0, 0, 0, 0.65);
 }
 
 div {
@@ -313,6 +313,10 @@ button {
   margin-left: pr(60);
 }
 
+.margin_left_64 {
+  margin-left: pr(64)
+}
+
 .margin_left_80 {
   margin-left: pr(80);
 }
@@ -397,6 +401,10 @@ button {
   margin-bottom: pr(40);
 }
 
+.margin_bottom_48 {
+  margin-bottom: pr(48);
+}
+
 .margin_bottom_50 {
   margin-bottom: pr(50);
 }
@@ -445,6 +453,7 @@ button {
   margin-right: pr(60);
 }
 
+
 .margin_right_80 {
   margin-right: pr(80);
 }
@@ -468,6 +477,11 @@ button {
 .padding_TB_20 {
   padding-top: pr(20);
   padding-bottom: pr(20);
+}
+
+.padding_TB_24 {
+  padding-top: pr(24);
+  padding-bottom: pr(24);
 }
 
 .padding_TB_30 {

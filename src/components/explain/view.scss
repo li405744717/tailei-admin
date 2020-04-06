@@ -1,0 +1,27 @@
+@import "@/styles/func";
+
+.explain {
+  position: absolute;
+  top: 0;
+  left: pr(30);
+  //width: pr(640);
+  z-index: 999;
+}
+
+.explain_arrow {
+  height: pr(30);
+  width: pr(30);
+  border-radius: pr(5);
+  transform: rotate(45deg);
+  margin-left: pr(50);
+  background: #5595FF;
+  margin-top: pr(8);
+}
+
+.explain_text {
+  padding: pr(16);
+  background: #5595FF;
+  border-radius: pr(10);
+  line-height: pr(38);
+  margin-top: pr(-20);
+}

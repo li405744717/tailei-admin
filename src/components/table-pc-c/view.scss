@@ -1,4 +1,4 @@
-@import "@/func";
+@import "@/styles/func";
 
 .line_item {
   border-bottom: 1px solid rgba(240, 240, 240, 0.5)
@@ -14,6 +14,7 @@
 
 .table_item {
   justify-content: center;
+
   span {
     width: fit-content;
   }
@@ -173,14 +174,14 @@
 
   .ant-table-header-column {
     width: 100%;
-    text-align: center;
+    //text-align: center;
   }
 
   .ant-table-column-sorters {
     display: flex !important;
     flex-direction: row;
     align-items: center;
-    justify-content: center;
+    //justify-content: center;
   }
 
   .ant-table-row-cell-last {
@@ -194,4 +195,15 @@
     }
   }
 
+  .ant-table-thead {
+    background: #FAFAFA;
+  }
+
+  .ant-table-small > .ant-table-content > .ant-table-body {
+    margin: 0;
+  }
+
+  .ant-table-thead > tr > th.ant-table-selection-column, .ant-table-tbody > tr > td.ant-table-selection-column {
+    text-align: left;
+  }
 }

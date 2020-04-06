@@ -17,16 +17,26 @@
 }
 
 .icon_login_bg {
-  width: pr(492);
-  height: pr(500);
+  width: pr(492*2);
+  height: pr(500*2);
 }
 
 .logo {
-  width: pr(46);
-  height: pr(46);
+  width: pr(46*2);
+  height: pr(46*2);
 }
 
 .icon_login {
-  width: pr(439);
-  height: pr(307);
+  width: pr(439*2);
+  height: pr(307*2);
+}
+
+.icon_arrow_bottom {
+  width: pr(32);
+  height: pr(32);
+}
+
+.icon_add {
+  width: pr(32);
+  height: pr(32);
 }

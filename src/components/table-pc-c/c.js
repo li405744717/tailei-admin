@@ -26,7 +26,8 @@ class CusPCTable extends React.Component {
     dataSource: PropTypes.array,
     columnRenderObj: PropTypes.object,
     emptyText: PropTypes.string,
-    onClick: PropTypes.func
+    onClick: PropTypes.func,
+    rowSelection: PropTypes.object
   }
   state = {
     hideFg: false,
