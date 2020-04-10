@@ -28,13 +28,13 @@ export const routerList = [
     path: '/home',
     children: [
       {
-        title: '租聘列表',
-        path: '/home/house-sale',
+        title: '租赁列表',
+        path: '/home/house-sale/list',
         C: HouseScaleList
       },
       {
-        title: '租聘信息',
-        path: '/home/house-sale/:code',
+        title: '租赁信息',
+        path: '/home/house-sale/info',
         C: HouseScaleInfo
       }
     ]

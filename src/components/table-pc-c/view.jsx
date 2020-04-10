@@ -137,12 +137,22 @@ export default function renderView(page) {
       <span className="text_32 gray margin_top_20">{emptyText}</span>
     </div>
   }
+  var current_page = 1, total_count = 100
+  let pagination = {
+    defaultPageSize: 15,
+    current: Number(current_page),
+    total: total_count,
+    showTotal: total => <div className="flex_row flex_1 align_center justify_start">
+      共{total}只
+    </div>,
+    showQuickJumper: true
+  }
   return (<div className="diagnose_table">
     {slotObj.before}
     {
       chart ?
         <div
-          className={`flex_column ${chart.top_border ? 'border_top' : ''} border_bottom ${!chart.bottom_border ? '' : ''}`}>
+          className={`flex_column ${chart.top_border ? 'border_top' : ''} ${!chart.bottom_border ? '' : ''}`}>
 
           {slotObj.middle}
 
@@ -156,6 +166,7 @@ export default function renderView(page) {
                          onMouseLeave: event => page.onRow("onMouseLeave", {})
                        };
                      }}
+                     pagination={pagination}
                      rowSelection={rowSelection}
                      showHeader={showHeader}/> : null
           }

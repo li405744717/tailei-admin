@@ -6,11 +6,14 @@ import {createStore, combineReducers, applyMiddleware, compose} from 'redux';
 import createSagaMiddleware from 'redux-saga'
 import saga, {helloSaga} from './Sagas'
 import userReducer from '@/pages/user/login/reducer'
+import houseSaleListReducer from '@/pages/house-sale/list/reducer'
+import houseSaleInfoReducer from '@/pages/house-sale/info/reducer'
 
 const reducer = combineReducers({
   // home: homeReducer,
   user: userReducer,
-
+  houseSaleList: houseSaleListReducer,
+  houseSaleInfo: houseSaleInfoReducer
 
 });
 

@@ -9,6 +9,8 @@ import {Breadcrumb, Alert} from 'antd';
 import {HashRouter as Router, Route, Switch, Link, withRouter} from 'react-router-dom';
 import {routerMap} from "./common/router";
 import $ from 'jquery'
+import {ConfigProvider} from 'antd';
+import zhCN from 'antd/es/locale/zh_CN';
 
 export default class App extends React.Component {
   static propTypes = {}
@@ -88,12 +90,17 @@ export default class App extends React.Component {
       <HeaderBar/>
       <div className="flex_row flex_1">
         <AppMenu curRouteItem={curRouteItem}/>
-        <div className="flex_1 flex_column padding_LR_30 padding_TB_16">
-          <Breadcrumb>{breadcrumbItems}</Breadcrumb>
-          <div className="bg_white margin_top_20 flex_1 app_page">
-            {this.props.children}
+        <ConfigProvider locale={zhCN}>
+          <div className="flex_1 flex_column padding_TB_16 ">
+            <div className='padding_LR_48'>
+              <Breadcrumb>{breadcrumbItems}</Breadcrumb>
+            </div>
+            <div className="bg_white margin_top_20 flex_1 app_page">
+              {this.props.children}
+            </div>
           </div>
-        </div>
+        </ConfigProvider>
+
       </div>
     </div>)
   }

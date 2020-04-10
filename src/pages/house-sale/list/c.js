@@ -4,7 +4,7 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import "./view.scss"
-import {setUser} from './actions'
+import {setShowFlag} from './actions'
 import UserAPI from '@/commAction/user'
 import PropTypes from 'prop-types'
 import wx from '@/common/wx'
@@ -80,7 +80,7 @@ class List extends React.Component {
         {data: [{text: '顾问'}, {text: '13022229999'}]},
         {data: [{text: '停车位'}]},
         {data: [{text: '下架中'}]},
-        {status: 'up'}
+        {status: 'success'}
       ],
       [
         {data: [{text: '2'}]},
@@ -89,7 +89,16 @@ class List extends React.Component {
         {data: [{text: '顾问'}, {text: '13022229999'}]},
         {data: [{text: '停车位'}]},
         {data: [{text: '下架中'}]},
-        {status: 'down'}
+        {status: 'fail'}
+      ],
+      [
+        {data: [{text: '2'}]},
+        {data: [{text: '业主'}, {text: '联系电话'}]},
+        {data: [{text: '聊城-冠县-XX街道'}, {text: 'XX花园 1单元-1号楼-302室'}]},
+        {data: [{text: '顾问'}, {text: '13022229999'}]},
+        {data: [{text: '停车位'}]},
+        {data: [{text: '下架中'}]},
+        {status: 'waiting'}
       ]
     ]
     let {table} = this.state
@@ -108,15 +117,21 @@ class List extends React.Component {
     console.log('selectedRowKeys changed: ', selectedRowKeys);
     this.setState({selectedRowKeys});
   }
+
+  setShowFilter(flag) {
+    this.props.setShowFlag({flag})
+  }
+
+
 }
 
 
 const mapStateToProps = (state) => {
   return {
-    user: state.user
+    ...state.houseSaleList
   }
 }
 
 
-export default connect(mapStateToProps, {setUser})(List)
+export default connect(mapStateToProps, {setShowFlag})(List)
 

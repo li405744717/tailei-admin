@@ -38,7 +38,7 @@ html, body, #root {
 }
 
 .app_container {
-  min-width: 1100px;
+  min-width: 1356px;
   height: 100%;
   //background-color: #EBEBEB;
   //max-width: 1260px;
@@ -353,12 +353,20 @@ button {
   margin-top: pr(30);
 }
 
+.margin_top_32 {
+  margin-top: pr(32);
+}
+
 .margin_top_-30 {
   margin-top: pr(-30);
 }
 
 .margin_top_40 {
   margin-top: pr(40);
+}
+
+.margin_top_48 {
+  margin-top: pr(48);
 }
 
 .margin_top_50 {
@@ -453,7 +461,6 @@ button {
   margin-right: pr(60);
 }
 
-
 .margin_right_80 {
   margin-right: pr(80);
 }
@@ -532,6 +539,11 @@ button {
 .padding_LR_40 {
   padding-left: pr(40);
   padding-right: pr(40);
+}
+
+.padding_LR_48 {
+  padding-left: pr(48);
+  padding-right: pr(48);
 }
 
 .padding_LR_50 {
@@ -782,7 +794,6 @@ button {
     border: 1px solid rgba(0, 0, 0, 0.15) !important;
   }
 }
-
 
 .width_child {
   width: fit-content;

@@ -4,20 +4,51 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import "./view.scss"
-import {setUser} from '../list/actions'
+import {setShowFlag} from './actions'
 import UserAPI from '@/commAction/user'
 import PropTypes from 'prop-types'
 import wx from '@/common/wx'
 import renderView from "./view";
 
-class Info extends React.Component {
+
+let sections = [
+  {
+    title: '编号'
+  },
+  {
+    title: '联系方式'
+  },
+  {
+    title: '地址'
+  },
+  {
+    title: '顾问'
+  },
+  {
+    title: '房源类型'
+  },
+  {
+    title: '状态'
+  },
+  {
+    title: '操作',
+    renderId: 'buttons'
+  }
+]
+
+class List extends React.Component {
   static propTypes = {}
 
   static defaultProps = {}
 
   state = {
     username: '',
-    password: ''
+    password: '',
+    table: {
+      sections: sections,
+      contents: []
+
+    }
   }
 
   constructor(props, context) {
@@ -36,7 +67,36 @@ class Info extends React.Component {
   }
 
   onLoad(props) {
+    this.initColumns()
+  }
 
+  initColumns() {
+
+    var contents = [
+      [
+        {data: [{text: '1'}]},
+        {data: [{text: '业主'}, {text: '联系电话'}]},
+        {data: [{text: '聊城-冠县-XX街道'}, {text: 'XX花园 1单元-1号楼-302室'}]},
+        {data: [{text: '顾问'}, {text: '13022229999'}]},
+        {data: [{text: '停车位'}]},
+        {data: [{text: '下架中'}]},
+        {status: 'up'}
+      ],
+      [
+        {data: [{text: '2'}]},
+        {data: [{text: '业主'}, {text: '联系电话'}]},
+        {data: [{text: '聊城-冠县-XX街道'}, {text: 'XX花园 1单元-1号楼-302室'}]},
+        {data: [{text: '顾问'}, {text: '13022229999'}]},
+        {data: [{text: '停车位'}]},
+        {data: [{text: '下架中'}]},
+        {status: 'down'}
+      ]
+    ]
+    let {table} = this.state
+    table.contents = contents
+    this.setState({
+      table
+    })
   }
 
   render() {
@@ -44,15 +104,27 @@ class Info extends React.Component {
   }
 
 
+  onSelectChange(selectedRowKeys) {
+    console.log('selectedRowKeys changed: ', selectedRowKeys);
+    this.setState({selectedRowKeys});
+  }
+
+  setShowFilter(flag) {
+    this.props.setShowFlag({flag})
+  }
+
+  edit() {
+
+  }
 }
 
 
 const mapStateToProps = (state) => {
   return {
-    user: state.user
+    ...state.houseSaleInfo
   }
 }
 
 
-export default connect(mapStateToProps, {setUser})(Info)
+export default connect(mapStateToProps, {setShowFlag})(List)
 
