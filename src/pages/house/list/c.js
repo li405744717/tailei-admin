@@ -30,19 +30,22 @@ let sections = [
     title: '编号'
   },
   {
-    title: '联系方式'
+    title: '姓名'
   },
   {
-    title: '地址'
+    title: '电话'
   },
   {
-    title: '房源类型'
+    title: '城市'
   },
   {
-    title: '发布时间'
+    title: '小区'
   },
   {
-    title: '状态'
+    title: '房屋'
+  },
+  {
+    title: '面积'
   },
   {
     title: '操作',
@@ -66,10 +69,10 @@ class List extends Page {
     filter: {
       house_type: 'all',
       status: 'all',
-      startRange: null,
-      endRange: null,
+      startArea: null,
+      endArea: null,
       name: null,
-      phone: null
+      phone: null,
     },
     editItem: null,
     showEdit: false
@@ -99,30 +102,33 @@ class List extends Page {
     var contents = [
       [
         {data: [{text: '1'}]},
-        {data: [{text: '业主'}, {text: '联系电话'}]},
-        {data: [{text: '聊城-冠县-XX街道'}, {text: 'XX花园 1单元-1号楼-302室'}]},
-        {data: [{text: '停车位'}]},
-        {data: [{text: '2020-02-26  16:32:42'}]},
-        {data: [{text: '待审核'}]},
-        {status: 'waiting', id: 1}
+        {data: [{text: 'XX'}]},
+        {data: [{text: '13300001234'}]},
+        {data: [{text: '聊城-冠县-XX街道'}]},
+        {data: [{text: 'XX花园'}]},
+        {data: [{text: '1单元-1号楼-302室'}]},
+        {data: [{text: '80.51'}]},
+        {id: 1}
       ],
       [
-        {data: [{text: '2'}]},
-        {data: [{text: '业主'}, {text: '联系电话'}]},
-        {data: [{text: '聊城-冠县-XX街道'}, {text: 'XX花园 1单元-1号楼-302室'}]},
-        {data: [{text: '停车位'}]},
-        {data: [{text: '2020-02-26  16:32:42'}]},
-        {data: [{text: '已通过'}]},
-        {status: 'success', id: 2}
+        {data: [{text: '1'}]},
+        {data: [{text: 'XX'}]},
+        {data: [{text: '13300001234'}]},
+        {data: [{text: '聊城-冠县-XX街道'}]},
+        {data: [{text: 'XX花园'}]},
+        {data: [{text: '1单元-1号楼-302室'}]},
+        {data: [{text: '80.51'}]},
+        {id: 2}
       ],
       [
-        {data: [{text: '2'}]},
-        {data: [{text: '业主'}, {text: '联系电话'}]},
-        {data: [{text: '聊城-冠县-XX街道'}, {text: 'XX花园 1单元-1号楼-302室'}]},
-        {data: [{text: '停车位'}]},
-        {data: [{text: '2020-02-26  16:32:42'}]},
-        {data: [{text: '未通过'}]},
-        {status: 'fail', id: 3}
+        {data: [{text: '1'}]},
+        {data: [{text: 'XX'}]},
+        {data: [{text: '13300001234'}]},
+        {data: [{text: '聊城-冠县-XX街道'}]},
+        {data: [{text: 'XX花园'}]},
+        {data: [{text: '1单元-1号楼-302室'}]},
+        {data: [{text: '80.51'}]},
+        {id: 3}
       ]
     ]
     let {table} = this.state
@@ -156,7 +162,7 @@ class List extends Page {
   edit(id) {
     var {table} = this.state
     var editItem = table.contents.find(item => {
-      return item[6].id === id
+      return item[7].id === id
     })
     this.setState({
       showEdit: true,
@@ -193,7 +199,7 @@ class List extends Page {
   goInfo(id) {
     wx.navigateTo({
       page: this,
-      url: `/home/house-sale/info/${id}`
+      url: `/home/house/list/${id}`
     })
   }
 
@@ -214,12 +220,17 @@ class List extends Page {
 }
 
 
-const mapStateToProps = (state) => {
-  return {
-    ...state.houseSaleInfo
+const
+  mapStateToProps = (state) => {
+    return {
+      ...state.houseList
+    }
   }
-}
 
 
-export default connect(mapStateToProps, {setShowFlag})(List)
+export default connect(mapStateToProps, {setShowFlag})
+
+(
+  List
+)
 

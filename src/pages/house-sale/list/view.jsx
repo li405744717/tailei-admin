@@ -3,21 +3,20 @@
  */
 import React from 'react'
 import "./view.scss"
-import {Button, Icon, Checkbox, Input} from "antd";
+import {Button, Icon, Checkbox, Input, Radio} from "antd";
 import CusPCTable from "../../../components/table-pc-c/c";
 
 export default function renderView(page) {
 
   const {user} = page.props
-  const {table, selectedRowKeys} = page.state
+  const {table, selectedRowKeys, status} = page.state
   const {showFilter} = page.props
   const columnRenderObj = {
     buttons: (content, record, rowIndex) => {
-      console.log('content', content)
       return <div className='flex_row align_center justify_end'>
-        <Button>修改</Button>
-        <Button>{content.status === 'up' ? '下架' : '上架'}</Button>
-        <Button>删除</Button>
+        <Button type={"link"}>修改</Button>
+        <Button type={"link"}>{content.status === 'up' ? '下架' : '上架'}</Button>
+        <Button type={"link"}>删除</Button>
       </div>
     }
   }
@@ -46,7 +45,7 @@ export default function renderView(page) {
               <Button className='margin_left_16'>
                 <span>重置</span>
               </Button>
-              <Button type='link' className='flex_row center' onClick={() => page.setShowFilter(true)}>
+              <Button type='link' className='flex_row center margin_left_40' onClick={() => page.setShowFilter(true)}>
                 <span className='primary'>展开</span>
                 <img src={require('@/img/icon_arrow_bottom_2.png')} className='icon_arrow_bottom_2'/>
               </Button>
@@ -71,7 +70,7 @@ export default function renderView(page) {
               <Button className='margin_left_16'>
                 <span>重置</span>
               </Button>
-              <Button type='link' className='flex_row center' onClick={() => page.setShowFilter(false)}>
+              <Button type='link' className='flex_row center margin_left_40' onClick={() => page.setShowFilter(false)}>
                 <span className='primary'>收起</span>
                 <img src={require('@/img/icon_arrow_bottom_2.png')} className='icon_arrow_bottom_2 rotate_180'/>
               </Button>
@@ -83,11 +82,14 @@ export default function renderView(page) {
       <div className='flex_row align_center margin_bottom_48'>
         <span className='text_32 black'>租赁列表</span>
         <div className='flex_1'/>
-        <Button>全部</Button>
-        <Button>下架中</Button>
-        <Button>上架中</Button>
 
-        <Button type='primary' className='flex_row center margin_left_64'>
+        <Radio.Group value={status} onChange={page.handleSizeChange}>
+          <Radio.Button value="all">全部</Radio.Button>
+          <Radio.Button value="off">下架中</Radio.Button>
+          <Radio.Button value="on">上架中</Radio.Button>
+        </Radio.Group>
+
+        <Button type='primary' className='flex_row center margin_left_64' onClick={() => page.add()}>
           <img src={require('@/img/icon_add.png')} className='icon_add margin_right_10'/>
           <span className='white'>新建</span>
         </Button>
@@ -96,6 +98,15 @@ export default function renderView(page) {
           <img src={require('@/img/icon_arrow_bottom.png')} className='icon_arrow_bottom'/>
         </Button>
       </div>
+      {
+        selectedRowKeys && selectedRowKeys.length > 0 ?
+          <div className='flex_row align_center house_sale_list_table_tip_view padding_LR_32 margin_bottom_20'>
+            <img src={require('@/img/icon_tip.png')} className='icon_tip'/>
+            <span className='margin_left_16'>已选择 <span className='primary'>{selectedRowKeys.length}</span> 项</span>
+            <Button type='link' onClick={() => page.cleanSelect()} className='margin_left_40'><span
+              className='primary'>清空</span></Button>
+          </div> : null
+      }
       <CusPCTable rowSelection={rowSelection} columnRenderObj={columnRenderObj} chart={table}/>
     </div>
 

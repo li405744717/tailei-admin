@@ -6,7 +6,7 @@ import {Table} from 'antd'
 
 export default function renderView(page) {
   const {hideFg, explain, explainTop, left, showAll} = page.state
-  var {chart, columnRenderObj, emptyText, rowSelection} = page.props
+  var {chart, columnRenderObj, emptyText, rowSelection, pageObj} = page.props
   var {showHeader} = page.props
   const slotKeys = ['before', 'title_before', 'middle', 'after', "title_after", "tag"]
   var slotObj = filter.formatSlot(slotKeys, page)
@@ -138,7 +138,7 @@ export default function renderView(page) {
     </div>
   }
   var current_page = 1, total_count = 100
-  let pagination = {
+  let pagination = pageObj ? {
     defaultPageSize: 15,
     current: Number(current_page),
     total: total_count,
@@ -146,7 +146,7 @@ export default function renderView(page) {
       共{total}只
     </div>,
     showQuickJumper: true
-  }
+  } : false
   return (<div className="diagnose_table">
     {slotObj.before}
     {

@@ -9,6 +9,18 @@
   }
 }
 
+.site-input-group-wrapper .site-input-split {
+  background-color: #fff !important;
+}
+
+.site-input-group-wrapper .site-input-right {
+  border-left-width: 0 !important;
+}
+
+.site-input-group-wrapper .site-input-right:hover {
+  border-left-width: 1px !important;
+}
+
 .house_sale_list_table_tip_view {
   background: #E6F7FF;
   border: 1px solid #BAE7FF;

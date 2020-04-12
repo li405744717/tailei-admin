@@ -15,9 +15,13 @@ const loadable = (loader, loading = loadingComponent) => {
 }
 
 const HouseScaleList = loadable(() => import('@/pages/house-sale/list/c'))
+const HouseScaleListInfo = loadable(() => import('@/pages/house-sale/list-info/c'))
+
 const HouseScaleInfo = loadable(() => import('@/pages/house-sale/info/c'))
+const HouseScaleInfoInfo = loadable(() => import('@/pages/house-sale/info-info/c'))
 
-
+const HouseList = loadable(() => import('@/pages/house/list/c'))
+const HouseListInfo = loadable(() => import('@/pages/house/list-info/c'))
 export const routerList = [
   {
     title: '首页',
@@ -25,7 +29,7 @@ export const routerList = [
   },
   {
     title: '房屋租赁管理',
-    path: '/home',
+    path: '/home/house-sale',
     children: [
       {
         title: '租赁列表',
@@ -36,6 +40,35 @@ export const routerList = [
         title: '租赁信息',
         path: '/home/house-sale/info',
         C: HouseScaleInfo
+      },
+      {
+        title: '新建',
+        path: '/home/house-sale/list/add',
+        C: HouseScaleListInfo,
+        hideMenu: true
+      },
+      {
+        title: '租赁详情',
+        path: '/home/house-sale/info/:code',
+        C: HouseScaleInfoInfo,
+        hideMenu: true
+      }
+    ]
+  },
+  {
+    title: '房屋管理',
+    path: '/home/house',
+    children: [
+      {
+        title: '房屋列表',
+        path: '/home/house/list',
+        C: HouseList
+      },
+      {
+        title: '房屋详情',
+        path: '/home/house/list/:code',
+        C: HouseListInfo,
+        hideMenu: true
       }
     ]
   }

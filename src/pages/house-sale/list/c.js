@@ -9,6 +9,7 @@ import UserAPI from '@/commAction/user'
 import PropTypes from 'prop-types'
 import wx from '@/common/wx'
 import renderView from "./view";
+import Page from "../../basic/page/Page";
 
 
 let sections = [
@@ -36,7 +37,7 @@ let sections = [
   }
 ]
 
-class List extends React.Component {
+class List extends Page {
   static propTypes = {}
 
   static defaultProps = {}
@@ -48,7 +49,8 @@ class List extends React.Component {
       sections: sections,
       contents: []
 
-    }
+    },
+    status: 'all'
   }
 
   constructor(props, context) {
@@ -118,11 +120,26 @@ class List extends React.Component {
     this.setState({selectedRowKeys});
   }
 
+  cleanSelect() {
+    this.setState({
+      selectedRowKeys: []
+    })
+  }
+
   setShowFilter(flag) {
     this.props.setShowFlag({flag})
   }
 
+  add() {
+    wx.navigateTo({
+      page: this,
+      url: '/home/house-sale/list/add'
+    })
+  }
 
+  handleSizeChange = (e) => {
+    this.setState({status: e.target.value});
+  }
 }
 
 

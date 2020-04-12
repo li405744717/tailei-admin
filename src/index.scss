@@ -23,6 +23,7 @@ html, body, #root {
   display: flex;
   flex-direction: column;
   flex: 1;
+  line-height: normal;
   font-family: AlibabaPuHuiTiR, PingFangSC, sans-serif !important;
 }
 
@@ -42,6 +43,7 @@ html, body, #root {
   height: 100%;
   //background-color: #EBEBEB;
   //max-width: 1260px;
+  color: rgba(0, 0, 0, 0.85);
 
 }
 
@@ -71,11 +73,13 @@ textarea {
 }
 
 span {
-  color: rgba(0, 0, 0, 0.65);
+
 }
 
 div {
   //overflow: hidden;
+  //width: fit-content;
+  //height: fit-content;
 }
 
 input, textarea {
@@ -393,6 +397,10 @@ button {
   margin-bottom: pr(10);
 }
 
+.margin_bottom_16 {
+  margin-bottom: pr(16);
+}
+
 .margin_bottom_20 {
   margin-bottom: pr(20);
 }
@@ -419,6 +427,10 @@ button {
 
 .margin_bottom_60 {
   margin-bottom: pr(60);
+}
+
+.margin_bottom_64 {
+  margin-bottom: pr(64);
 }
 
 .margin_bottom_70 {
@@ -496,14 +508,29 @@ button {
   padding-bottom: pr(30);
 }
 
+.padding_TB_32 {
+  padding-top: pr(32);
+  padding-bottom: pr(32);
+}
+
 .padding_TB_40 {
   padding-top: pr(40);
   padding-bottom: pr(40);
 }
 
+.padding_TB_48 {
+  padding-top: pr(48);
+  padding-bottom: pr(48);
+}
+
 .padding_TB_60 {
   padding-top: pr(60);
   padding-bottom: pr(60);
+}
+
+.padding_TB_64 {
+  padding-top: pr(64);
+  padding-bottom: pr(64);
 }
 
 .padding_LR_10 {
@@ -551,6 +578,11 @@ button {
   padding-right: pr(50);
 }
 
+.padding_LR_64 {
+  padding-left: pr(64);
+  padding-right: pr(64);
+}
+
 .padding_LR_100 {
   padding-left: pr(100);
   padding-right: pr(100);
@@ -595,6 +627,10 @@ button {
 
 .padding_T_40 {
   padding-top: pr(40)
+}
+
+.padding_T_32 {
+  padding-top: pr(32)
 }
 
 .padding_B_10 {
@@ -742,7 +778,7 @@ button {
 
   .ant-btn {
     img {
-      margin-right: pr(16);
+      //margin-right: pr(16);
     }
 
     .margin_right_0 {
@@ -768,6 +804,7 @@ button {
     display: flex;
     flex-direction: row;
     justify-content: center;
+    padding: 0
   }
 
   .ant-btn-primary[disabled] {
@@ -810,33 +847,6 @@ button {
   padding: 0 !important;;
   box-shadow: none !important;
   background-color: transparent !important;
-}
-
-.ant-modal-header {
-  padding: pr(40) pr(40) !important;
-  border-bottom: none !important;
-  padding-bottom: pr(20) !important;
-}
-
-.ant-modal-body {
-  padding: pr(40) pr(40) !important;
-  padding-top: 0 !important;
-}
-
-.ant-tooltip {
-  max-width: unset !important;
-}
-
-.ant-tooltip-inner {
-  background-color: white !important;
-}
-
-.ant-tooltip-arrow::before {
-  background-color: white !important;
-}
-
-.ant-modal-title {
-  font-family: AlibabaPuHuiTiM, PingFangSC, sans-serif !important;
 }
 
 .anticon {

@@ -17,7 +17,8 @@ class CusPCTable extends React.Component {
     },
     columnRenderObj: {},
     showHeader: true,
-    emptyText: '暂无数据'
+    emptyText: '暂无数据',
+    pageObj:true
   }
   static propTypes = {
     chart: PropTypes.object.isRequired, //菜单,数据,显示顺序
@@ -27,7 +28,8 @@ class CusPCTable extends React.Component {
     columnRenderObj: PropTypes.object,
     emptyText: PropTypes.string,
     onClick: PropTypes.func,
-    rowSelection: PropTypes.object
+    rowSelection: PropTypes.object,
+    pageObj: PropTypes.bool
   }
   state = {
     hideFg: false,

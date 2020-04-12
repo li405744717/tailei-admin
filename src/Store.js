@@ -9,11 +9,15 @@ import userReducer from '@/pages/user/login/reducer'
 import houseSaleListReducer from '@/pages/house-sale/list/reducer'
 import houseSaleInfoReducer from '@/pages/house-sale/info/reducer'
 
+import houseListReducer from '@/pages/house/list/reducer'
+
 const reducer = combineReducers({
   // home: homeReducer,
   user: userReducer,
   houseSaleList: houseSaleListReducer,
-  houseSaleInfo: houseSaleInfoReducer
+  houseSaleInfo: houseSaleInfoReducer,
+
+  houseList: houseListReducer
 
 });
 

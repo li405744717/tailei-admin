@@ -36,11 +36,39 @@
   height: pr(32);
 }
 
-.icon_arrow_bottom_2{
+.icon_arrow_bottom_2 {
   width: pr(32);
   height: pr(32);
 }
+
 .icon_add {
   width: pr(32);
   height: pr(32);
+}
+
+.icon_add_2 {
+  width: pr(48);
+  height: pr(48);
+}
+
+.icon_tip {
+  width: pr(32);
+  height: pr(32);
+}
+
+.house_image {
+  width: pr(208);
+  height: pr(208);
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  margin-right: pr(16);
+}
+
+.house_image:last-child {
+  margin-right: 0;
+}
+
+.avatar_image {
+  width: pr(56);
+  height: pr(56);
+  border-radius: 50%;
 }
