@@ -45,7 +45,7 @@ let sections = [
     title: '房屋'
   },
   {
-    title: '面积'
+    title: '反馈时间'
   },
   {
     title: '操作',
@@ -67,16 +67,14 @@ class List extends Page {
 
     },
     filter: {
-      house_type: 'all',
-      status: 'all',
-      startArea: null,
-      endArea: null,
+      apartment: undefined,
+      startRange: null,
+      endRange: null,
       name: null,
-      phone: null,
+      phone: null
     },
     editItem: null,
-    showEdit: false,
-    uploadToast: false
+    showEdit: false
   }
 
   constructor(props, context) {
@@ -104,31 +102,31 @@ class List extends Page {
       [
         {data: [{text: '1'}]},
         {data: [{text: 'XX'}]},
-        {data: [{text: '13300001234'}]},
+        {data: [{text: '134****1234'}]},
         {data: [{text: '聊城-冠县-XX街道'}]},
         {data: [{text: 'XX花园'}]},
         {data: [{text: '1单元-1号楼-302室'}]},
-        {data: [{text: '80.51'}]},
+        {data: [{text: '2020-02-26  16:32:42'}]},
         {id: 1}
       ],
       [
         {data: [{text: '1'}]},
         {data: [{text: 'XX'}]},
-        {data: [{text: '13300001234'}]},
+        {data: [{text: '134****1234'}]},
         {data: [{text: '聊城-冠县-XX街道'}]},
         {data: [{text: 'XX花园'}]},
         {data: [{text: '1单元-1号楼-302室'}]},
-        {data: [{text: '80.51'}]},
+        {data: [{text: '2020-02-26  16:32:42'}]},
         {id: 2}
       ],
       [
         {data: [{text: '1'}]},
         {data: [{text: 'XX'}]},
-        {data: [{text: '13300001234'}]},
+        {data: [{text: '134****1234'}]},
         {data: [{text: '聊城-冠县-XX街道'}]},
         {data: [{text: 'XX花园'}]},
         {data: [{text: '1单元-1号楼-302室'}]},
-        {data: [{text: '80.51'}]},
+        {data: [{text: '2020-02-26  16:32:42'}]},
         {id: 3}
       ]
     ]
@@ -163,7 +161,7 @@ class List extends Page {
   edit(id) {
     var {table} = this.state
     var editItem = table.contents.find(item => {
-      return item[7].id === id
+      return item[6].id === id
     })
     this.setState({
       showEdit: true,
@@ -200,7 +198,7 @@ class List extends Page {
   goInfo(id) {
     wx.navigateTo({
       page: this,
-      url: `/home/house/list/${id}`
+      url: `/home/suggest/list/${id}`
     })
   }
 
@@ -218,31 +216,15 @@ class List extends Page {
       showEdit: flag
     })
   }
+}
 
-  setUploadToast(flag) {
-    this.setState({
-      uploadToast: flag
-    })
-  }
 
-  uploadOK = (e) => {
-    console.log(this.refs.houseUpload.fundList)
-    this.setUploadToast(false)
+const mapStateToProps = (state) => {
+  return {
+    ...state.suggestList
   }
 }
 
 
-const
-  mapStateToProps = (state) => {
-    return {
-      ...state.houseList
-    }
-  }
-
-
-export default connect(mapStateToProps, {setShowFlag})
-
-(
-  List
-)
+export default connect(mapStateToProps, {setShowFlag})(List)
 

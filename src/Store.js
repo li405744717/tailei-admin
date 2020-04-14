@@ -11,13 +11,21 @@ import houseSaleInfoReducer from '@/pages/house-sale/info/reducer'
 
 import houseListReducer from '@/pages/house/list/reducer'
 
+import repairListReducer from '@/pages/repair/list/reducer'
+
+import suggestListReducer from '@/pages/suggest/info/reducer'
+
 const reducer = combineReducers({
   // home: homeReducer,
   user: userReducer,
   houseSaleList: houseSaleListReducer,
   houseSaleInfo: houseSaleInfoReducer,
 
-  houseList: houseListReducer
+  houseList: houseListReducer,
+
+  repairList: repairListReducer,
+
+  suggestList: suggestListReducer
 
 });
 

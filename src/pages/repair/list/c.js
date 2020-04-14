@@ -12,17 +12,17 @@ import renderView from "./view";
 import Page from "../../basic/page/Page";
 import moment from 'moment';
 
-export const HOUSE_TYPES = [
-  {title: '全部类型', key: 'all'},
-  {title: '住宅/居民楼', key: 'zhuzhai'},
-  {title: '办公楼/写字楼/商铺', key: 'bangonglou'},
-  {title: '停车位', key: 'car'}
+export const REPAIR_MAN = [
+  {title: 'yyy-134***0000', key: 1},
+  {title: 'zzz-134***0000', key: 2},
+  {title: 'ccc-134***0000', key: 3},
+  {title: 'xxx-134***0000', key: 4}
 ]
 
-export const HOUSE_STATUS = [
-  {title: '待审核', key: 'waiting'},
-  {title: '已通过', key: 'success'},
-  {title: '未通过', key: 'fail'},
+export const REPAIR_STATUS = [
+  {title: '待分配', key: 'distribute'},
+  {title: '待维修', key: 'repairing'},
+  {title: '已维修', key: 'complete'},
 ]
 
 let sections = [
@@ -30,22 +30,19 @@ let sections = [
     title: '编号'
   },
   {
-    title: '姓名'
+    title: '联系方式'
   },
   {
-    title: '电话'
+    title: '地址'
   },
   {
-    title: '城市'
+    title: '时间'
   },
   {
-    title: '小区'
+    title: '维修状态'
   },
   {
-    title: '房屋'
-  },
-  {
-    title: '面积'
+    title: '支付状态'
   },
   {
     title: '操作',
@@ -67,16 +64,12 @@ class List extends Page {
 
     },
     filter: {
-      house_type: 'all',
       status: 'all',
-      startArea: null,
-      endArea: null,
-      name: null,
-      phone: null,
+      repair_man_id:undefined
     },
     editItem: null,
     showEdit: false,
-    uploadToast: false
+    uploadToast: false,
   }
 
   constructor(props, context) {
@@ -103,33 +96,39 @@ class List extends Page {
     var contents = [
       [
         {data: [{text: '1'}]},
-        {data: [{text: 'XX'}]},
-        {data: [{text: '13300001234'}]},
-        {data: [{text: '聊城-冠县-XX街道'}]},
-        {data: [{text: 'XX花园'}]},
-        {data: [{text: '1单元-1号楼-302室'}]},
-        {data: [{text: '80.51'}]},
+        {data: [{text: 'XX'}, {text: '134****1234'}]},
+        {data: [{text: '聊城-冠县-XX街道'}, {text: 'XX花园 1单元-1号楼-302室'}]},
+        {data: [{text: '报修时间:2020-04-14 16:56:33'}, {text: '预约时间:2020-04-14 16:56:33'}]},
+        {data: [{text: '待分配'}, {text: '--'}], status: 'distribute', repair_man_id: 1},
+        {data: [{text: '--'}, {text: '--'}]},
         {id: 1}
       ],
       [
-        {data: [{text: '1'}]},
-        {data: [{text: 'XX'}]},
-        {data: [{text: '13300001234'}]},
-        {data: [{text: '聊城-冠县-XX街道'}]},
-        {data: [{text: 'XX花园'}]},
-        {data: [{text: '1单元-1号楼-302室'}]},
-        {data: [{text: '80.51'}]},
+        {data: [{text: '2'}]},
+        {data: [{text: 'XX'}, {text: '134****1234'}]},
+        {data: [{text: '聊城-冠县-XX街道'}, {text: 'XX花园 1单元-1号楼-302室'}]},
+        {data: [{text: '报修时间:2020-04-14 16:56:33'}, {text: '预约时间:2020-04-14 16:56:33'}]},
+        {data: [{text: '待维修'}, {text: 'XXX:199****1234'}], status: 'repairing', repair_man_id: 1},
+        {data: [{text: '--'}, {text: '--'}]},
         {id: 2}
       ],
       [
-        {data: [{text: '1'}]},
-        {data: [{text: 'XX'}]},
-        {data: [{text: '13300001234'}]},
-        {data: [{text: '聊城-冠县-XX街道'}]},
-        {data: [{text: 'XX花园'}]},
-        {data: [{text: '1单元-1号楼-302室'}]},
-        {data: [{text: '80.51'}]},
+        {data: [{text: '3'}]},
+        {data: [{text: 'XX'}, {text: '134****1234'}]},
+        {data: [{text: '聊城-冠县-XX街道'}, {text: 'XX花园 1单元-1号楼-302室'}]},
+        {data: [{text: '报修时间:2020-04-14 16:56:33'}, {text: '预约时间:2020-04-14 16:56:33'}]},
+        {data: [{text: '已维修'}, {text: 'XXX:199****1234'}], status: 'complete', repair_man_id: 1},
+        {data: [{text: '--'}, {text: '--'}]},
         {id: 3}
+      ],
+      [
+        {data: [{text: '4'}]},
+        {data: [{text: 'XX'}, {text: '134****1234'}]},
+        {data: [{text: '聊城-冠县-XX街道'}, {text: 'XX花园 1单元-1号楼-302室'}]},
+        {data: [{text: '报修时间:2020-04-14 16:56:33'}, {text: '预约时间:2020-04-14 16:56:33'}]},
+        {data: [{text: '已维修'}, {text: 'XXX:199****1234'}], status: 'complete', repair_man_id: 1},
+        {data: [{text: '已支付'}, {text: '线下支付:200'}]},
+        {id: 4}
       ]
     ]
     let {table} = this.state
@@ -163,7 +162,7 @@ class List extends Page {
   edit(id) {
     var {table} = this.state
     var editItem = table.contents.find(item => {
-      return item[7].id === id
+      return item[6].id === id
     })
     this.setState({
       showEdit: true,
@@ -200,7 +199,7 @@ class List extends Page {
   goInfo(id) {
     wx.navigateTo({
       page: this,
-      url: `/home/house/list/${id}`
+      url: `/home/repair/list/${id}`
     })
   }
 
@@ -235,7 +234,7 @@ class List extends Page {
 const
   mapStateToProps = (state) => {
     return {
-      ...state.houseList
+      ...state.repairList
     }
   }
 

@@ -22,6 +22,12 @@ const HouseScaleInfoInfo = loadable(() => import('@/pages/house-sale/info-info/c
 
 const HouseList = loadable(() => import('@/pages/house/list/c'))
 const HouseListInfo = loadable(() => import('@/pages/house/list-info/c'))
+
+const RepairList = loadable(() => import('@/pages/repair/list/c'))
+const RepairListInfo = loadable(() => import('@/pages/repair/list-info/c'))
+
+const SuggestList = loadable(() => import('@/pages/suggest/info/c'))
+const SuggestListInfo = loadable(() => import('@/pages/suggest/list-info/c'))
 export const routerList = [
   {
     title: '首页',
@@ -68,6 +74,40 @@ export const routerList = [
         title: '房屋详情',
         path: '/home/house/list/:code',
         C: HouseListInfo,
+        hideMenu: true
+      }
+    ]
+  },
+  {
+    title: '保修信息',
+    path: '/home/repair',
+    children: [
+      {
+        title: '家具报修',
+        path: '/home/repair/list',
+        C: RepairList
+      },
+      {
+        title: '报修详情',
+        path: '/home/repair/list/:code',
+        C: RepairListInfo,
+        hideMenu: true
+      }
+    ]
+  },
+  {
+    title: '意见管理',
+    path: '/home/suggest',
+    children: [
+      {
+        title: '意见反馈',
+        path: '/home/suggest/list',
+        C: SuggestList
+      },
+      {
+        title: '意见反馈详情',
+        path: '/home/suggest/list/:code',
+        C: SuggestListInfo,
         hideMenu: true
       }
     ]

@@ -1,0 +1,23 @@
+@import "@/styles/func";
+
+.upload_c {
+  .ant-upload.ant-upload-drag .ant-upload {
+    padding: 0
+  }
+  margin-bottom: pr(-20);
+}
+
+.upload_container {
+  width: pr(430*2);
+  height: pr(194*2);
+  background-color: white;
+}
+
+.filter_table_toast_btn {
+  width: pr(256);
+  height: pr(80);
+}
+
+.filter_table_toast_btn_border {
+  border: 1px solid #BE9256 !important;
+}
