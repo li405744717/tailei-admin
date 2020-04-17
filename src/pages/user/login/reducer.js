@@ -6,7 +6,9 @@ import {FETCH_REQUEST, LOGIN, SET_USER} from './actionTypes'
 const State = {
   id: null,
   token: '3c35d374c0c0e14a995567a8fc06b0a64d44c255',
-  userInfo: {}
+  userInfo: {
+    account: '134****1234'
+  }
 }
 export default (state = State, action) => {
   var newState = JSON.parse(JSON.stringify(state))

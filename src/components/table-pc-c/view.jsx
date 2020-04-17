@@ -6,7 +6,7 @@ import {Table} from 'antd'
 
 export default function renderView(page) {
   const {hideFg, explain, explainTop, left, showAll} = page.state
-  var {chart, columnRenderObj, emptyText, rowSelection, pageObj} = page.props
+  var {chart, columnRenderObj, emptyText, rowSelection, pageObj, needBottom} = page.props
   var {showHeader} = page.props
   const slotKeys = ['before', 'title_before', 'middle', 'after', "title_after", "tag"]
   var slotObj = filter.formatSlot(slotKeys, page)
@@ -131,10 +131,15 @@ export default function renderView(page) {
       render: render
     })
   }
+  if (columns.length - 1 > 0) {
+    columns[columns.length - 1].align = 'right'
+  }
+
   var locale = {
     emptyText: <div className="flex_column center padding_TB_100">
       <img src={require('@/img/comb_none.png')} className="img_none"/>
-      <span className="text_32 gray margin_top_20">{emptyText}</span>
+      <span className="text_28 black margin_top_20">{emptyText}</span>
+      <span className="text_24 gray margin_top_20">您可以新建数据或者看看其他信息</span>
     </div>
   }
   var current_page = 1, total_count = 100
@@ -147,7 +152,7 @@ export default function renderView(page) {
     </div>,
     showQuickJumper: true
   } : false
-  return (<div className="diagnose_table">
+  return (<div className={`diagnose_table ${needBottom ? 'bottom_table' : ''}`}>
     {slotObj.before}
     {
       chart ?

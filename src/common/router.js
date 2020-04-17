@@ -28,6 +28,29 @@ const RepairListInfo = loadable(() => import('@/pages/repair/list-info/c'))
 
 const SuggestList = loadable(() => import('@/pages/suggest/info/c'))
 const SuggestListInfo = loadable(() => import('@/pages/suggest/list-info/c'))
+
+
+const SystemPwd = loadable(() => import('@/pages/system/pwd/c'))
+
+const SystemBanner = loadable(() => import('@/pages/system/banner/c'))
+const SystemBannerInfo = loadable(() => import('@/pages/system/banner-info/c'))
+
+const SystemShare = loadable(() => import('@/pages/system/share/c'))
+
+const SystemPush = loadable(() => import('@/pages/system/push/c'))
+
+const SystemRightRole = loadable(() => import('@/pages/system/role/c'))
+const SystemRightRoleInfo = loadable(() => import('@/pages/system/role-info/c'))
+
+
+const SystemAccount = loadable(() => import('@/pages/system/account/c'))
+const SystemAccountInfo = loadable(() => import('@/pages/system/account-info/c'))
+
+
+const PayList = loadable(() => import('@/pages/pay/list/c'))
+const PaySend = loadable(() => import('@/pages/pay/send/c'))
+const PaySet = loadable(() => import('@/pages/pay/set/c'))
+
 export const routerList = [
   {
     title: '首页',
@@ -79,7 +102,7 @@ export const routerList = [
     ]
   },
   {
-    title: '保修信息',
+    title: '报修信息',
     path: '/home/repair',
     children: [
       {
@@ -108,6 +131,82 @@ export const routerList = [
         title: '意见反馈详情',
         path: '/home/suggest/list/:code',
         C: SuggestListInfo,
+        hideMenu: true
+      }
+    ]
+  },
+  {
+    title: '缴费管理',
+    path: '/home/pay',
+    children: [
+      {
+        title: '缴费列表',
+        path: '/home/pay/list',
+        C: PayList
+      },
+      {
+        title: '发起缴费',
+        path: '/home/pay/send',
+        C: PaySend
+      },
+      {
+        title: '缴费设置',
+        path: '/home/pay/se',
+        C: PaySet
+      },
+    ]
+  },
+  {
+    title: '系统设置',
+    path: '/home/set',
+    children: [
+      {
+        title: '密码设置',
+        path: '/home/set/pwd',
+        C: SystemPwd
+      },
+      {
+        title: 'banner管理',
+        path: '/home/set/banner',
+        C: SystemBanner
+      },
+      {
+        title: '新建',
+        path: '/home/set/banner/add',
+        C: SystemBannerInfo,
+        hideMenu: true
+      },
+      {
+        title: '修改',
+        path: '/home/set/banner/edit/:id',
+        C: SystemBannerInfo,
+        hideMenu: true
+      },
+      {
+        title: '分享设置',
+        path: '/home/set/share',
+        C: SystemShare
+      },
+      {
+        title: '推送设置',
+        path: '/home/set/push',
+        C: SystemPush
+      },
+      {
+        title: '账户管理',
+        path: '/home/set/account',
+        C: SystemAccount
+      },
+      {
+        title: '新建账户',
+        path: '/home/set/account/add',
+        C: SystemAccountInfo,
+        hideMenu: true
+      },
+      {
+        title: '修改账户',
+        path: '/home/set/account/edit/:id',
+        C: SystemAccountInfo,
         hideMenu: true
       }
     ]

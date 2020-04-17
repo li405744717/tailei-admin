@@ -202,7 +202,7 @@
   .ant-table-row-cell-last {
     span {
       width: 100%;
-      text-align: right;
+      //text-align: right;
     }
 
     .ant-table-column-sorters {
@@ -222,6 +222,9 @@
     text-align: left;
   }
 
+}
+
+.bottom_table {
   .ant-table-content {
     border-bottom: 1px solid #E8E8E8;
   }

@@ -15,6 +15,8 @@ import repairListReducer from '@/pages/repair/list/reducer'
 
 import suggestListReducer from '@/pages/suggest/info/reducer'
 
+import payListReducer from '@/pages/pay/list/reducer'
+
 const reducer = combineReducers({
   // home: homeReducer,
   user: userReducer,
@@ -25,7 +27,9 @@ const reducer = combineReducers({
 
   repairList: repairListReducer,
 
-  suggestList: suggestListReducer
+  suggestList: suggestListReducer,
+
+  payList: payListReducer
 
 });
 

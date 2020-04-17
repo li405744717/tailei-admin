@@ -820,7 +820,7 @@ button {
   }
 
   .ant-btn-primary:focus {
-    background-color: #BE9256;
+    background-color: #1890FF;
   }
 
   .ant-btn-normal:focus {
@@ -828,7 +828,7 @@ button {
   }
 
   .ant-btn-border {
-    border: 1px solid #BE9256 !important;
+    border: 1px solid #1890FF !important;
   }
 
   .ant-btn-grayBorder {
@@ -858,4 +858,53 @@ button {
   display: flex;
   flex-direction: row;
   align-items: center;
+}
+
+.cus_form_title_text {
+  width: pr(230);
+  text-align: right;
+}
+
+.page {
+  background: #F0F3F7;
+
+  .house_sale_input_view {
+    width: pr(480);
+    height: pr(64);
+  }
+  .fund_option_time_picker_view {
+    width: pr(480);
+    height: pr(64);
+  }
+}
+
+.cus_form {
+  .cus_form_input_view {
+    width: pr(468*2);
+    height: pr(32*2);
+    border-radius: pr(8);
+  }
+  .fund_option_time_picker_view{
+    width: pr(468*2);
+    height: pr(32*2);
+    border-radius: pr(8);
+  }
+}
+
+.house_sale_list_table_tip_view {
+  background: #E6F7FF;
+  border: 1px solid #BAE7FF;
+  height: pr(80);
+  width: 100%;
+}
+
+.ant-modal-body {
+  .house_sale_input_view {
+    width: pr(480);
+    height: pr(64);
+  }
+  .house_sale_input_area_view {
+    width: pr(960);
+    height: pr(200);
+  }
 }

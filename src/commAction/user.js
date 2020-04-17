@@ -9,7 +9,7 @@ var ConfigURL = Config.CONFIGURL
 
 export default {
   login(params) {
-    let url = AgentURL + 'account/login/'
+    let url = AgentURL + 'role/login/'
     return request.post(url, params, null, true).then(data => {
       return data;
     }).catch(err => {
@@ -17,7 +17,7 @@ export default {
     });
   },
   agent_login(params) {
-    let url = AgentURL + 'account/fplogin/'
+    let url = AgentURL + 'role/fplogin/'
     return request.get(url, params, null, true).then(data => {
       return data;
     }).catch(err => {
@@ -25,7 +25,7 @@ export default {
     });
   },
   agent_authorize(params) {
-    let url = AgentURL + 'account/authorize/'
+    let url = AgentURL + 'role/authorize/'
     return request.post(url, params, null, true).then(data => {
       return data;
     }).catch(err => {
