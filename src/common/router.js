@@ -51,6 +51,12 @@ const PayList = loadable(() => import('@/pages/pay/list/c'))
 const PaySend = loadable(() => import('@/pages/pay/send/c'))
 const PaySet = loadable(() => import('@/pages/pay/set/c'))
 
+
+const InformationList = loadable(() => import('@/pages/information/list/c'))
+const InformationListInfo = loadable(() => import('@/pages/information/list-info/c'))
+
+const InformationType = loadable(() => import('@/pages/information/type/c'))
+
 export const routerList = [
   {
     title: '首页',
@@ -133,6 +139,34 @@ export const routerList = [
         C: SuggestListInfo,
         hideMenu: true
       }
+    ]
+  },
+  {
+    title: '文章管理',
+    path: '/home/information',
+    children: [
+      {
+        title: '文章列表',
+        path: '/home/information/list',
+        C: InformationList
+      },
+      {
+        title: '新建',
+        path: '/home/information/list/add',
+        C: InformationListInfo,
+        hideMenu: true
+      },
+      {
+        title: '修改',
+        path: '/home/information/list/edit/:id',
+        C: InformationListInfo,
+        hideMenu: true
+      },
+      {
+        title: '文章分类管理',
+        path: '/home/information/type',
+        C: InformationType
+      },
     ]
   },
   {

@@ -1,0 +1,15 @@
+@import "@/styles/func";
+
+
+.site-input-group-wrapper .site-input-split {
+  background-color: #fff !important;
+}
+
+.site-input-group-wrapper .site-input-right {
+  border-left-width: 0 !important;
+}
+
+.site-input-group-wrapper .site-input-right:hover {
+  border-left-width: 1px !important;
+}
+

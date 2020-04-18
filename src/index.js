@@ -113,7 +113,7 @@ window.addEventListener('message', function (e) {
 });
 ReactDOM.render(
   <Provider store={store}>
-    <BrowserRouter basename='admin'>
+    <BrowserRouter basename='/'>
       <Switch>
         <Route exact path="/login" component={Login}/>
 
