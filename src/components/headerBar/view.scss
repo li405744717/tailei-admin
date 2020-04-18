@@ -1,7 +1,18 @@
 @import "@/styles/func";
 
 .headerBar_container {
-  height: pr(80);
+  height: pr(128);
   width: 100%;
+  margin-bottom: 0;
+}
+
+.header_bar_left_view {
+  width: 256px;
+  background: #1C2755;
+  height: 100%;
+}
+
+.header_bar_right_view {
+  height: 100%;
   border-bottom: 1px solid #EBEBEB;
 }
