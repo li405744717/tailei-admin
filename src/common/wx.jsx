@@ -102,7 +102,7 @@ function request(option) {
       if (JSON.stringify(option.data) != JSON.stringify({})) {
         url += '?'
         for (let key in option.data) {
-          url += key + '=' + option.data[key] + '&'
+          if (option.data[key]) url += key + '=' + option.data[key] + '&'
         }
         if (url) {
           let lastIndex = url.lastIndexOf('&')

@@ -142,7 +142,7 @@ export default function renderView(page) {
       <span className="text_24 gray margin_top_20">您可以新建数据或者看看其他信息</span>
     </div>
   }
-  var current_page = 1, total_count = 100
+  var current_page = 1, total_count = chart && chart.count || 0
   let pagination = pageObj ? {
     defaultPageSize: 15,
     current: Number(current_page),

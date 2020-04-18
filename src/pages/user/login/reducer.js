@@ -5,7 +5,7 @@ import {FETCH_REQUEST, LOGIN, SET_USER} from './actionTypes'
 
 const State = {
   id: null,
-  token: '3c35d374c0c0e14a995567a8fc06b0a64d44c255',
+  token: '052756c520a19d1dc9fa5f361344590d474b0adf',
   userInfo: {
     account: '134****1234'
   }

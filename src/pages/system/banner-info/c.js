@@ -10,7 +10,8 @@ import PropTypes from 'prop-types'
 import wx from '@/common/wx'
 import renderView from "./view";
 import Page from "../../basic/page/Page";
-
+import systemAPI from '@/commAction/system'
+import utils from "../../../common/utils";
 
 class BannerInfo extends Page {
   static propTypes = {}
@@ -94,6 +95,36 @@ class BannerInfo extends Page {
 
   submit() {
     console.log(this.state.form)
+    let form = this.state.form
+    let param = {
+      title: form[0].value,
+      position: form[1].value,
+    }
+    systemAPI.banner_add(param).then(data => {
+      utils.showToast('新建成功')
+      this.clear()
+    }).catch(e => {
+      utils.showToast('新建失败,请重试')
+    })
+  }
+
+  clear() {
+    this.setState({
+      form: [
+        {title: '标题', type: 'input', key: 'title'},
+        {
+          title: '位置',
+          type: 'radio',
+          key: 'position',
+          options: [
+            {title: '顶部', key: 'top'},
+            {title: '底部', key: 'bottom'}
+          ]
+        },
+        {title: '链接', type: 'input', key: 'link'},
+        {title: 'banner图', type: 'images', key: 'images', config: {limit: 1, remark: '建议尺寸：顶部749*386  底部710*360'}}
+      ]
+    })
   }
 }
 

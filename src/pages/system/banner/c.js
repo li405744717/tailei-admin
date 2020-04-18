@@ -11,11 +11,13 @@ import wx from '@/common/wx'
 import renderView from "./view";
 import Page from "../../basic/page/Page";
 import moment from 'moment';
+import systemAPI from '@/commAction/system'
+import utils from "../../../common/utils";
 
 export const BANNER_STATUS = [
   {title: '全部', key: 'all'},
-  {title: '上架中', key: 'on'},
-  {title: '下架中', key: 'off'},
+  {title: '上架中', key: 'up'},
+  {title: '下架中', key: 'down'},
 ]
 
 export const BANNER_TYPES = [
@@ -63,11 +65,11 @@ class List extends Page {
 
     },
     filter: {
-      status: undefined,
+      status: 'all',
       startRange: null,
       endRange: null,
-      name: null,
-      phone: null
+      title: null,
+      position: undefined
     },
     editItem: null,
     showEdit: false,
@@ -80,10 +82,12 @@ class List extends Page {
 
   componentDidMount() {
     // this.props.getFilters()
+    console.log('did')
     this.onLoad(this.props)
   }
 
   UNSAFE_componentWillReceiveProps(nextProps, nexContext) {
+    console.log('will')
     this.onLoad(nextProps)
     // utils.reSetPropsState(this, nextProps)
   }
@@ -93,41 +97,33 @@ class List extends Page {
   }
 
   initColumns() {
+    let {filter} = this.state
+    console.log('filter', filter)
+    var param = {
+      title: filter.title,
+      position: filter.position === 'all' ? undefined : filter.position,
+      status: filter.status === 'all' ? undefined : filter.status
+    }
 
-    var contents = [
-      [
-        {data: [{text: '1'}]},
-        {data: [{text: 'XX'}]},
-        {data: [{text: '顶部'}]},
-        {data: [{text: '1'}]},
-        {data: [{text: '下架中'}]},
-        {data: [{text: '2020-02-26  16:32:42'}]},
-        {id: 1, status: 'off'}
-      ],
-      [
-        {data: [{text: '1'}]},
-        {data: [{text: 'XX'}]},
-        {data: [{text: '顶部'}]},
-        {data: [{text: '1'}]},
-        {data: [{text: '上架中'}]},
-        {data: [{text: '2020-02-26  16:32:42'}]},
-        {id: 2, status: 'on'}
-      ],
-      [
-        {data: [{text: '1'}]},
-        {data: [{text: 'XX'}]},
-        {data: [{text: '顶部'}]},
-        {data: [{text: '1'}]},
-        {data: [{text: '下架中'}]},
-        {data: [{text: '2020-02-26  16:32:42'}]},
-        {id: 3, status: 'off'}
-      ]
-    ]
-    contents = []
-    let {table} = this.state
-    table.contents = contents
-    this.setState({
-      table
+    var contents = []
+    systemAPI.banner_list(param).then(data => {
+      for (var item of data.data) {
+        contents.push([
+          {data: [{text: item.id}]},
+          {data: [{text: item.title}]},
+          {data: [{text: item.position}]},
+          {data: [{text: item.weight}]},
+          {data: [{text: item.status}]},
+          {data: [{text: item.create_time}]},
+          {id: item.id, status: item.status === '上架中' ? 'up' : 'down'}
+        ])
+      }
+      let {table} = this.state
+      table.contents = contents
+      table.count = data.count
+      this.setState({
+        table
+      })
     })
   }
 
@@ -170,7 +166,9 @@ class List extends Page {
   handleSizeChange = (e) => {
     var {filter} = this.state
     filter.status = e.target.value
-    this.setState({filter});
+    this.setState({filter}, () => {
+      this.search()
+    });
   }
 
   onChangeDate(date) {
@@ -182,13 +180,13 @@ class List extends Page {
 
   onChangeSelect = (value) => {
     var {filter} = this.state
-    filter.house_type = value
+    filter.position = value
     this.setState({filter});
   }
 
   onChangeInput(e, key) {
     var {filter} = this.state
-    filter[key] = e.target.value
+    filter[key] = e.target.value === '' ? null : e.target.value
     this.setState({filter});
   }
 
@@ -213,6 +211,46 @@ class List extends Page {
     this.setState({
       showEdit: flag
     })
+  }
+
+  search() {
+    this.initColumns()
+  }
+
+  editItems(id, key, value) {
+    var ids = []
+    if (Array.isArray(id)) {
+      ids = id
+    } else {
+      ids = [id]
+    }
+    var paras = {
+      [key]: value
+    }
+    var param = {
+      paras,
+      ids
+    }
+    var api
+    if (value === 'delete') {
+      api = (param) => systemAPI.banner_delete(param)
+    } else {
+      api = (param) => systemAPI.banner_edit(param)
+    }
+    api(param).then(data => {
+      utils.showToast('操作成功')
+      this.initColumns()
+    }).catch(e => {
+      utils.showToast('操作失败,请重试')
+    })
+  }
+
+  editItemsAll(key, value) {
+    var {selectedRowKeys, table} = this.state
+    var ids = selectedRowKeys.map((item, index) => {
+      return table.contents[item][6].id
+    })
+    this.editItems(ids, key, value)
   }
 }
 

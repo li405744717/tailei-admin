@@ -19,12 +19,15 @@ export default function renderView(page) {
   const columnRenderObj = {
     buttons: (content, record, rowIndex) => {
       return <div className='flex_row align_center justify_end'>
-        <Button type={"link"} onClick={() => content.status === 'off' ? page.edit(content.id) : null}>
-          <span className={`${content.status === 'off' ? 'primary' : 'black'}`}>修改</span>
+        <Button type={"link"} onClick={() => content.status === 'down' ? page.edit(content.id) : null}>
+          <span className={`${content.status === 'down' ? 'primary' : 'black'}`}>修改</span>
         </Button>
-        <Button type={"link"}>{content.status === 'on' ? '下架' : '上架'}</Button>
-        <Button type={"link"}>
-          <span className={`${content.status === 'off' ? 'primary' : 'black'}`}>删除</span>
+        <div className='button_fg_line'/>
+        <Button type={"link"}
+                onClick={() => page.editItems(content.id, 'status', content.status === 'up' ? 'down' : 'up')}>{content.status === 'up' ? '下架' : '上架'}</Button>
+        <div className='button_fg_line'/>
+        <Button type={"link"} onClick={() => page.editItems(content.id, 'status', 'delete')}>
+          <span className={`${content.status === 'down' ? 'primary' : 'black'}`}>删除</span>
         </Button>
       </div>
     }
@@ -39,13 +42,13 @@ export default function renderView(page) {
       <div className='flex_row align_center'>
         <div className='flex_row align_center flex_1'>
           <span>标题：</span>
-          <Input placeholder='请输入' onChange={e => page.onChangeInput(e, 'name')} className='house_sale_input_view'/>
+          <Input placeholder='请输入' onChange={e => page.onChangeInput(e, 'title')} className='house_sale_input_view'/>
         </div>
         <div className='flex_row align_center flex_1 justify_end'>
           <span>位置：</span>
           <Select
             showSearch
-            value={filter.apartment}
+            value={filter.position}
             style={{width: 240}}
             placeholder="全部"
             optionFilterProp="children"
@@ -62,7 +65,7 @@ export default function renderView(page) {
           </Select>
         </div>
         <div className='flex_row align_center flex_1 justify_end'>
-          <Button type='primary'>
+          <Button type='primary' onClick={() => page.search()}>
             <span className='white'>查询</span>
           </Button>
           <Button className='margin_left_16'>
@@ -92,11 +95,11 @@ export default function renderView(page) {
         <Dropdown overlay={<Menu>
           {
             [
-              {title: '批量删除', type: 'deleteAll'},
-              {title: '批量上架', type: 'onAll'},
-              {title: '批量下架', type: 'offAll'}
+              {title: '批量删除', type: 'delete'},
+              {title: '批量上架', type: 'up'},
+              {title: '批量下架', type: 'down'}
             ].map((item, index) => {
-              return <Menu.Item key={item.type}>
+              return <Menu.Item key={item.type} onClick={() => page.editItemsAll('status', item.type)}>
                 <span className="text_28">{item.title}</span>
               </Menu.Item>
             })

@@ -912,3 +912,11 @@ button {
     height: pr(200);
   }
 }
+
+.button_fg_line {
+  width: 1px;
+  height: 14px;
+  background: #E9E9E9;
+  margin-right: pr(16);
+  margin-left: pr(16);
+}

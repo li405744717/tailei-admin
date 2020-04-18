@@ -26,7 +26,7 @@ var zipMenuItem = (item, index) => {
 }
 export default function renderView(page) {
   var {curRouteItem} = page.props
-  console.log('curRouteItem', curRouteItem)
+  // console.log('curRouteItem', curRouteItem)
   var pathSnippets = []
   var defaultSelectedKeys = []
   if (curRouteItem) {
@@ -39,7 +39,7 @@ export default function renderView(page) {
     const url = `/${pathSnippets.slice(0, index + 1).join('/')}`;
     defaultSelectedKeys.push(url)
   })
-  console.log('defaultSelectedKeys', defaultSelectedKeys)
+  // console.log('defaultSelectedKeys', defaultSelectedKeys)
   return (<Menu
     theme="dark"
     onClick={page.handleClick}

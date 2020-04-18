@@ -32,7 +32,7 @@ export default class App extends React.Component {
     App.APP = this
   }
 
-  setParams(originPathName, params) {
+  setParams(originPathName, params, search) {
     var location = window.location
     let url = location.href;
 
@@ -47,13 +47,14 @@ export default class App extends React.Component {
 
     this.setState({
       originPathName,
-      params
+      params,
+      search
     })
   }
 
   render() {
     const {location} = this.props;
-    const {params, originPathName} = this.state
+    const {params, originPathName, search} = this.state
 
 
     var pathname = location.pathname
@@ -64,18 +65,26 @@ export default class App extends React.Component {
     })
     const navBarTitle = curRouteItem ? curRouteItem.title : '404'
     const pathSnippets = _originPathName.split('/').filter(i => i);
-    console.log('pathSnippets', pathSnippets)
     const extraBreadcrumbItems = pathSnippets.map((_, index) => {
       const url = `/${pathSnippets.slice(0, index + 1).join('/')}`;
       var routeItem = routerMap.find(item => {
         return item.path === url
       })
+      var link = null
+      if (routeItem) {
+        link = routeItem.path + (search || '')
+        for (var key in params) {
+          if (link.indexOf(key) > -1) {
+            link = link.replace(`:${key}`, params[key])
+          }
+        }
+      }
       return (
         routeItem ?
           <Breadcrumb.Item key={url}>
             {
-              routeItem.C ?
-                <Link to={routeItem.path}>
+              routeItem.C && index != pathSnippets.length - 1 ?
+                <Link to={link}>
                   <span className="text_24 black">{routeItem.title}</span>
                 </Link> :
                 <span className="text_24 gray">{routeItem.title}</span>
@@ -86,21 +95,21 @@ export default class App extends React.Component {
     const breadcrumbItems = [].concat(extraBreadcrumbItems);
 
     return (<div className="flex_column app_container" id="app">
+
+      {/*<ConfigProvider locale={zhCN}>*/}
+
       <NavBar title={navBarTitle}/>
       <HeaderBar/>
       <div className="flex_row flex_1">
         <AppMenu curRouteItem={curRouteItem}/>
-        <ConfigProvider locale={zhCN}>
-          <div className="flex_1 flex_column padding_TB_16 ">
-            <div className='padding_LR_48'>
-              <Breadcrumb>{breadcrumbItems}</Breadcrumb>
-            </div>
-            <div className="bg_white margin_top_20 flex_1 app_page">
-              {this.props.children}
-            </div>
+        <div className="flex_1 flex_column padding_TB_16 ">
+          <div className='padding_LR_48'>
+            <Breadcrumb>{breadcrumbItems}</Breadcrumb>
           </div>
-        </ConfigProvider>
-
+          <div className="bg_white margin_top_20 flex_1 app_page">
+            {this.props.children}
+          </div>
+        </div>
       </div>
     </div>)
   }
