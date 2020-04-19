@@ -57,6 +57,26 @@ const InformationListInfo = loadable(() => import('@/pages/information/list-info
 
 const InformationType = loadable(() => import('@/pages/information/type/c'))
 
+export const permission = {
+  banner: ['/home/set', '/home/set/banner', '/home/set/banner/add', '/home/set/banner/edit/:id'],
+  share: ['/home/set', '/home/set/share'],
+  push: ['/home/set', '/home/set/push'],
+  right: ['/home/set', '/home/set/account', '/home/set/account/add', '/home/set/account/edit/:id'],
+  pay_list: ['/home/pay', '/home/pay/list'],
+  pay_send: ['/home/pay', '/home/pay/send'],
+  pay_set: ['/home/pay', '/home/pay/set'],
+  house_list: ['/home/house', '/home/house/list', '/home/house/list/:code'],
+  house_import_list: ['/home/house', '/home/house/list'],
+  house_sale_list: ['/home/house-sale', '/home/house-sale/list', '/home/house-sale/list/add'],
+  house_sale_info: ['/home/house-sale', '/home/house-sale/info', '/home/house-sale/info/:code'],
+  repair: ['/home/repair', '/home/repair/list', '/home/repair/list/:code'],
+  worker: [''],
+  suggest: ['/home/suggest', '/home/suggest/list', '/home/suggest/list/:code'],
+  information_list: ['/home/information', '/home/information/list', '/home/information/list/add', '/home/information/list/edit/:id'],
+  information_type: ['/home/information', '/home/information/type'],
+  noPermission: ['/home/set', '/home/set/pwd']
+}
+
 export const routerList = [
   {
     title: '首页',
@@ -185,7 +205,7 @@ export const routerList = [
       },
       {
         title: '缴费设置',
-        path: '/home/pay/se',
+        path: '/home/pay/set',
         C: PaySet
       },
     ]
@@ -197,7 +217,7 @@ export const routerList = [
       {
         title: '密码设置',
         path: '/home/set/pwd',
-        C: SystemPwd
+        C: SystemPwd,
       },
       {
         title: 'banner管理',
@@ -265,5 +285,5 @@ var zip = (item) => {
 for (var item of routerList) {
   routerMap = routerMap.concat(zip(item))
 }
-console.log(routerMap)
+// console.log(routerMap)
 export var routerMap = routerMap

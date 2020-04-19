@@ -9,6 +9,7 @@ import UserAPI from '@/commAction/user'
 import PropTypes from 'prop-types'
 import wx from '@/common/wx'
 import renderView from "./view";
+import config from '@/common/config'
 
 class Login extends React.Component {
   static propTypes = {}
@@ -51,12 +52,17 @@ class Login extends React.Component {
     // this.props.login()
     wx.showLoading({title: '请稍后...', mask: true})
     var params = {
-      username: 'zsw',
-      password: 'zxcasd123'
+      username: '13479186301',
+      password: '123456'
     }
     UserAPI.login(params).then(data => {
       wx.hideLoading()
       this.props.setUser(data)
+      if (data.token && this.autoLogin) {
+        wx.setStorage({key: config.env + '_user', data: data})
+      } else {
+        wx.setStorage({key: config.env + '_user', data: null})
+      }
       this.handleAction(data.token)
     })
     // app.globalData.token = '4313120545a40d6355ab736e9e6566b0cb709170'
@@ -82,6 +88,7 @@ class Login extends React.Component {
 
   onChange(e) {
     console.log(e.target.checked)
+    this.autoLogin = e.target.checked
   }
 }
 

@@ -11,19 +11,20 @@ import wx from '@/common/wx'
 import renderView from "./view";
 import Page from "../../basic/page/Page";
 import moment from 'moment';
+import systemAPI from '@/commAction/system'
+import utils from "../../../common/utils";
 
 export const ROLES = [
   {title: '全部', key: 'all'},
-  {title: '顶部', key: 'top'},
-  {title: '底部', key: 'bottom'},
+  {title: '房屋顾问', key: 'consultant'},
+  {title: '后台管理', key: 'admin'},
+  {title: '后台运营', key: 'operator'},
+  {title: '维修人员', key: 'worker'},
 ]
 
 let sections = [
   {
     title: '编号'
-  },
-  {
-    title: '账户名称'
   },
   {
     title: '角色'
@@ -58,6 +59,7 @@ class List extends Page {
     },
     filter: {
       status: undefined,
+      role: undefined,
       startRange: null,
       endRange: null,
       name: null,
@@ -88,39 +90,31 @@ class List extends Page {
 
   initColumns() {
 
-    var contents = [
-      [
-        {data: [{text: '1'}]},
-        {data: [{text: 'XX'}]},
-        {data: [{text: '房产顾问'}]},
-        {data: [{text: 'XXXX'}]},
-        {data: [{text: '134****4321'}]},
-        {data: [{text: '停用'}]},
-        {id: 1, status: 'off'}
-      ],
-      [
-        {data: [{text: '1'}]},
-        {data: [{text: 'XX'}]},
-        {data: [{text: '房产顾问'}]},
-        {data: [{text: 'XXXX'}]},
-        {data: [{text: '134****4321'}]},
-        {data: [{text: '正常'}]},
-        {id: 2, status: 'on'}
-      ],
-      [
-        {data: [{text: '1'}]},
-        {data: [{text: 'XX'}]},
-        {data: [{text: '房产顾问'}]},
-        {data: [{text: 'XXXX'}]},
-        {data: [{text: '134****4321'}]},
-        {data: [{text: '停用'}]},
-        {id: 3, status: 'off'}
-      ]
-    ]
-    let {table} = this.state
-    table.contents = contents
-    this.setState({
-      table
+    let {filter} = this.state
+    console.log('filter', filter)
+    var param = {
+      name: filter.name,
+      role: filter.role === 'all' ? undefined : filter.role
+    }
+
+    var contents = []
+    systemAPI.account_list(param).then(data => {
+      for (var item of data.data) {
+        contents.push([
+          {data: [{text: item.id}]},
+          {data: [{text: item.role}]},
+          {data: [{text: item.name}]},
+          {data: [{text: item.phone}]},
+          {data: [{text: item.status}]},
+          {id: item.id, status: item.status === '正常' ? 'on' : 'off'}
+        ])
+      }
+      let {table} = this.state
+      table.contents = contents
+      table.count = data.count
+      this.setState({
+        table
+      })
     })
   }
 
@@ -175,7 +169,7 @@ class List extends Page {
 
   onChangeSelect = (value) => {
     var {filter} = this.state
-    filter.house_type = value
+    filter.role = value
     this.setState({filter});
   }
 
@@ -205,6 +199,38 @@ class List extends Page {
   setShowEdit(flag) {
     this.setState({
       showEdit: flag
+    })
+  }
+
+  search() {
+    this.initColumns()
+  }
+
+  editItems(id, key, value) {
+    var ids = []
+    if (Array.isArray(id)) {
+      ids = id
+    } else {
+      ids = [id]
+    }
+    var paras = {
+      [key]: value
+    }
+    var param = {
+      paras,
+      ids
+    }
+    var api
+    if (value === 'delete') {
+      api = (param) => systemAPI.account_delete(param)
+    } else {
+      api = (param) => systemAPI.account_edit(param)
+    }
+    api(param).then(data => {
+      utils.showToast('操作成功')
+      this.initColumns()
+    }).catch(e => {
+      utils.showToast('操作失败,请重试')
     })
   }
 }

@@ -68,7 +68,7 @@ function requestAction(method, url, data, third, noToken, noToast) {
     'Authorization': 'Token ' + token,
   }
   if (noToken) delete header.Authorization
-  if (!token) delete  header.Authorization
+  if (!token) delete header.Authorization
   let userInfo = getGData('userInfo')
   option.header = header
 
@@ -198,8 +198,8 @@ function put(url, data, third, noToast) {
   return request('PUT', url, data, third, noToast)
 }
 
-function post(url, data, third, token, noToast) {
-  return request('POST', url, data, third, token, noToast)
+function post(url, data, third, noToken, noToast) {
+  return request('POST', url, data, third, noToken, noToast)
 }
 
 function get(url, data, third, noToken, noToast) {

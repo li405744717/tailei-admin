@@ -41,7 +41,7 @@ const loadable = (loader, loading = loadingComponent) => {
 const App = loadable(() => import('./app'))
 
 const Login = loadable(() => import('@/pages/user/login/c'))
-
+const Permission = loadable(() => import('@/pages/user/permission/c'))
 
 var param = {};
 window.location.search.replace(/([^?&=]+)=([^&]+)/g, (_, k, v) => param[k] = v);
@@ -55,51 +55,21 @@ function checkToken() {
   }
 }
 
-console.log('fcCode cookie:', Cookies.get(), Cookies.get('fcCode'), 'params:', param.fcCode)
-let DefaultAgentId = config.env === 'devkb' ? null : null
-let DefaultAgentToken = config.env === 'devkb' ? null : null
-let AGENT_ID = Cookies.get('fcCode') || param.fcCode || DefaultAgentId
-let AGENT_TOKEN = Cookies.get('nfpToken') || param.nfpToken || DefaultAgentToken
+function checkPermission(path) {
+  const state = store.getState()
+  var userPermissionPaths = state.user.userPermissionPaths
+  if (userPermissionPaths.includes(path)) return true
+  else return false
+}
 
-let localUserInfo = wx.getStorage(config.env + '_userInfo')
+
+let localUserInfo = wx.getStorage(config.env + '_user')
 console.log('localUserInfo', localUserInfo)
-if (AGENT_ID) {
-  store.dispatch({type: SET_USER, id: AGENT_ID})
-  userAPI.agent_authorize({fcCode: AGENT_ID, nfpToken: AGENT_TOKEN}).then(data => {
-    if (data.status) {
-      wx.setStorage({
-        key: config.env + '_userInfo',
-        data: {
-          token: data.token,
-          id: AGENT_ID
-        }
-      })
-      store.dispatch({type: SET_USER, id: AGENT_ID, token: data.token})
-    } else {
-      utils.showToast('无效用户,请登录')
-      if (window.parent && window.parent.postMessage) {
-        try {
-          window.parent.postMessage({data: 'loginfail'}, '*')
-        } catch (e) {
-          console.log('parent login function', e)
-        }
-      }
-    }
-  })
-  // userAPI.agent_login({agentId: AGENT_ID}).then(data => {
-  //   store.dispatch({type: SET_USER, id: AGENT_ID, token: data.token})
-  // })
-} else if (localUserInfo && localUserInfo.token) {
-  console.log('no agent_id,get local userInfo')
-  store.dispatch({type: SET_USER, id: localUserInfo.id, token: localUserInfo.token})
+if (localUserInfo && localUserInfo.token) {
+  console.log('get local localUserInfo')
+  store.dispatch({type: SET_USER, ...localUserInfo})
 } else {
-  if (window.parent && window.parent.postMessage) {
-    try {
-      window.parent.postMessage({data: 'loginfail'}, '*')
-    } catch (e) {
-      console.log('parent login function', e)
-    }
-  }
+  console.log('please login')
 }
 
 window.addEventListener('message', function (e) {
@@ -128,8 +98,11 @@ ReactDOM.render(
               <Switch className="flex_column flex_1">
                 {
                   routerMap.map((item, index) => {
-                    return item.C ?
-                      <Route exact path={item.path} component={item.C} key={`route_${index}`}/> : null
+                    let C = item.C
+                    return C ?
+                      <Route exact path={item.path}
+                             render={props => !checkPermission(props.match.path) ? <Permission/> : <C {...props}/>}
+                             key={`route_${index}`}/> : null
                   })
                 }
               </Switch>

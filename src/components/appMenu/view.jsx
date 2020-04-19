@@ -2,24 +2,35 @@ import * as React from "react";
 import filter from '@/common/filters'
 import Config from "@/common/config";
 import {Menu, Icon} from 'antd';
-import {routerList} from "../../common/router";
+import {routerList, permission} from "../../common/router";
+import store from '@/Store'
 
 const {SubMenu} = Menu;
+const state = store.getState()
+const user = state.user
+
+var userPermissionPaths = user.userPermissionPaths
 
 var zipMenuItem = (item, index) => {
   if (item.children) {
-    return <SubMenu key={item.path} title={<span>
-      {/*<Icon type="mail"/>*/}
-      <span className='white'>{item.title}</span>
-    </span>}>
-      {
-        item.children.map((child, index) => {
-          return zipMenuItem(child)
-        })
-      }
-    </SubMenu>
+    if (userPermissionPaths.includes(item.path)) {
+      return <SubMenu key={item.path} title={
+        <span>
+          {/*<Icon type="mail"/>*/}
+          <span className='white'>{item.title}</span>
+        </span>}>
+        {
+          item.children.map((child, index) => {
+            return zipMenuItem(child)
+          })
+        }
+      </SubMenu>
+    } else {
+      return null
+    }
   } else if (!item.hideMenu) {
-    return <Menu.Item key={item.path}>{item.title}</Menu.Item>
+    return userPermissionPaths.includes(item.path) ?
+      <Menu.Item key={item.path}>{item.title}</Menu.Item> : null
   } else {
     return null
   }

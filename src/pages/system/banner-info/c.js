@@ -99,6 +99,8 @@ class BannerInfo extends Page {
     let param = {
       title: form[0].value,
       position: form[1].value,
+      weight:1,
+      status:'down'
     }
     systemAPI.banner_add(param).then(data => {
       utils.showToast('新建成功')

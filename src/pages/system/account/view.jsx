@@ -22,7 +22,10 @@ export default function renderView(page) {
         <Button type={"link"} onClick={() => page.edit(content.id)}>
           <span className="primary">修改</span>
         </Button>
-        <Button type={"link"}>{content.status === 'off' ? '启用' : '停用'}</Button>
+        <div className='button_fg_line'/>
+        <Button type={"link"}
+                onClick={() => page.editItems(content.id, 'status', content.status === 'on' ? 'off' : 'on')}>{content.status === 'off' ? '启用' : '停用'}</Button>
+        <div className='button_fg_line'/>
         <Button type={"link"}>
           <span className="primary">删除</span>
         </Button>
@@ -45,7 +48,7 @@ export default function renderView(page) {
           <span>角色：</span>
           <Select
             showSearch
-            value={filter.apartment}
+            value={filter.role}
             style={{width: 240}}
             placeholder="全部"
             optionFilterProp="children"
@@ -62,7 +65,7 @@ export default function renderView(page) {
           </Select>
         </div>
         <div className='flex_row align_center flex_1 justify_end'>
-          <Button type='primary'>
+          <Button type='primary' onClick={() => page.search()}>
             <span className='white'>查询</span>
           </Button>
           <Button className='margin_left_16'>

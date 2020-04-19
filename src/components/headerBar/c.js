@@ -3,11 +3,11 @@ import renderView from './view'
 import utils from '@/common/utils'
 import './view.scss'
 import wx from '@/common/wx'
-import Config from '@/common/config'
+import config from '@/common/config'
 import {withRouter} from 'react-router-dom'
-import {GData as app} from "../../common/global_data";
+import {connect} from 'react-redux'
 import PropTypes from "prop-types";
-
+import {setUser} from "@/pages/user/login/actions";
 
 class HeaderBar extends React.Component {
   static defaultProps = {
@@ -36,6 +36,23 @@ class HeaderBar extends React.Component {
     return renderView(this)
   }
 
+  doAction(type) {
+    if (type === 'logout') {
+      this.props.setUser({})
+      wx.setStorage({key: config.env + '_user', data: null})
+      wx.relaunchTo({
+        page: this,
+        url: '/home/login'
+      })
+    }
+  }
 }
 
-export default withRouter(HeaderBar)
+const mapStateToProps = (state) => {
+  return {
+    user: state.user
+  }
+}
+
+
+export default connect(mapStateToProps, {setUser})(withRouter(HeaderBar))

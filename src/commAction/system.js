@@ -37,7 +37,7 @@ export default {
   banner_delete(params) {
     let url = RequestURL + 'material/material/admin_banner_update/'
     var param = {
-      action: 'DELETE”',
+      action: 'DELETE',
       ...params
     }
     return request.post(url, param).then(data => {
@@ -45,5 +45,46 @@ export default {
     }).catch(err => {
       return err;
     });
-  }
+  },
+
+  account_list(params) {
+    let url = RequestURL + 'account/staff/staff_list/'
+    return request.get(url, params).then(data => {
+      return data;
+    }).catch(err => {
+      return err;
+    });
+  },
+  account_add(params) {
+    let url = RequestURL + 'account/staff/staff_add/'
+    return request.post(url, params).then(data => {
+      return data;
+    }).catch(err => {
+      return err;
+    });
+  },
+  account_edit(params) {
+    let url = RequestURL + 'account/staff/staff_update/'
+    var param = {
+      action: 'UPDATE',
+      ...params
+    }
+    return request.post(url, param).then(data => {
+      return data;
+    }).catch(err => {
+      return err;
+    });
+  },
+  account_delete(params) {
+    let url = RequestURL + 'account/staff/staff_update/'
+    var param = {
+      action: 'DELETE',
+      ...params
+    }
+    return request.post(url, param).then(data => {
+      return data;
+    }).catch(err => {
+      return err;
+    });
+  },
 }
