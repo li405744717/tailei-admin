@@ -50,10 +50,11 @@ class Login extends React.Component {
 
   onPass() {
     // this.props.login()
+    var {password, username} = this.state
     wx.showLoading({title: '请稍后...', mask: true})
     var params = {
-      username: '13479186301',
-      password: '123456'
+      username,
+      password
     }
     UserAPI.login(params).then(data => {
       wx.hideLoading()

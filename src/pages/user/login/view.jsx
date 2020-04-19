@@ -27,12 +27,12 @@ export default function renderView(page) {
           <div className='login_short_line margin_top_8'/>
           <div className='flex_row align_center login_input_view margin_top_24'>
             <Icon type='user' className="light_gray text_32"/>
-            <Input onChange={e => page.setInputValue(e.target.value, 'user')} size="large" placeholder="帐号"
+            <Input onChange={e => page.setInputValue(e.target.value, 'username')} size="large" placeholder="帐号"
                    className='login_input_item'/>
           </div>
           <div className='flex_row align_center login_input_view margin_top_24'>
             <Icon type='lock' className="light_gray text_32"/>
-            <Input onChange={e => page.setInputValue(e.target.value, 'pwd')} type='password' size="large"
+            <Input onChange={e => page.setInputValue(e.target.value, 'password')} type='password' size="large"
                    placeholder="密码"
                    className='login_input_item'/>
           </div>
