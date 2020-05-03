@@ -236,7 +236,7 @@ class BannerInfo extends Page {
       permissions
     }
     systemAPI.account_add(param).then(data => {
-      utils.showToast('新建成功')
+      utils.showToast(data.detail || '新建成功')
       this.clear()
     }).catch(e => {
       utils.showToast('新建失败,请重试')
