@@ -11,6 +11,7 @@ import wx from '@/common/wx'
 import renderView from "./view";
 import Page from "../../basic/page/Page";
 import moment from 'moment';
+import informationAPI from '@/commAction/information'
 
 export const INFORMATION_TYPES = [
   {title: 'yyy-134***0000', key: '1'},
@@ -102,56 +103,34 @@ class List extends Page {
 
   initColumns() {
 
-    var contents = [
-      [
-        {data: [{text: '1'}]},
-        {data: [{text: 'XXXXXXXXXXXXXXXX'}]},
-        {data: [{text: '热点'}]},
-        {data: [{text: '2020-04-14 16:56:33'}]},
-        {data: [{text: '10'}]},
-        {data: [{text: '1340'}]},
-        {data: [{text: '下架中'}]},
-        {home: true, status: 'off'},
-        {id: 1, status: 'off'}
-      ],
-      [
-        {data: [{text: '2'}]},
-        {data: [{text: 'XXXXXXXXXXXXXXXX'}]},
-        {data: [{text: '热点'}]},
-        {data: [{text: '2020-04-14 16:56:33'}]},
-        {data: [{text: '10'}]},
-        {data: [{text: '1340'}]},
-        {data: [{text: '下架中'}]},
-        {home: false, status: 'off'},
-        {id: 2, status: 'off'}
-      ],
-      [
-        {data: [{text: '3'}]},
-        {data: [{text: 'XXXXXXXXXXXXXXXX'}]},
-        {data: [{text: '热点'}]},
-        {data: [{text: '2020-04-14 16:56:33'}]},
-        {data: [{text: '10'}]},
-        {data: [{text: '1340'}]},
-        {data: [{text: '上架中'}]},
-        {home: true, status: 'on'},
-        {id: 3, status: 'on'}
-      ],
-      [
-        {data: [{text: '4'}]},
-        {data: [{text: 'XXXXXXXXXXXXXXXX'}]},
-        {data: [{text: '热点'}]},
-        {data: [{text: '2020-04-14 16:56:33'}]},
-        {data: [{text: '10'}]},
-        {data: [{text: '1340'}]},
-        {data: [{text: '上架中'}]},
-        {home: false, status: 'on'},
-        {id: 4, status: 'on'}
-      ]
-    ]
-    let {table} = this.state
-    table.contents = contents
-    this.setState({
-      table
+    let {filter} = this.state
+    console.log('filter', filter)
+    var param = {
+      name: filter.name,
+      role: filter.role === 'all' ? undefined : filter.role
+    }
+
+    var contents = []
+    informationAPI.information_list(param).then(data => {
+      for (var item of data.data) {
+        contents.push([
+          {data: [{text: item.id}]},
+          {data: [{text: item.title}]},
+          {data: [{text: item.label}]},
+          {data: [{text: item.publish_time}]},
+          {data: [{text: item.shares}]},
+          {data: [{text: item.reads}]},
+          {data: [{text: item.status}]},
+          {home: item.main_page, status: item.status === '上架中' ? 'on' : 'off'},
+          {id: item.id, status: item.status === '上架中' ? 'on' : 'off'}
+        ])
+      }
+      let {table} = this.state
+      table.contents = contents
+      table.count = data.count
+      this.setState({
+        table
+      })
     })
   }
 

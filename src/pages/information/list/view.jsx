@@ -3,11 +3,11 @@
  */
 import React from 'react'
 import "./view.scss"
-import {Button, Icon, Checkbox, Input, Radio, DatePicker, Select, Switch} from "antd";
+import {Button, Icon, Checkbox, Input, Radio, DatePicker, Select, Switch, ConfigProvider} from "antd";
 import CusPCTable from "../../../components/table-pc-c/c";
 import {INFORMATION_STATUS, INFORMATION_TYPES} from './c'
 import PropTypes from "prop-types";
-
+import zhCN from 'antd/es/locale/zh_CN';
 
 const {Option} = Select;
 const {RangePicker} = DatePicker;
@@ -69,9 +69,11 @@ export default function renderView(page) {
         </div>
         <div className='flex_row align_center flex_1'>
           <span>发布时间：</span>
-          <RangePicker className="fund_option_time_picker_view"
-                       onChange={e => page.onChangeDate(e)}
-                       value={[filter.startRange, filter.endRange]}/>
+          <ConfigProvider locale={zhCN}>
+            <RangePicker className="fund_option_time_picker_view"
+                         onChange={e => page.onChangeDate(e)}
+                         value={[filter.startRange, filter.endRange]}/>
+          </ConfigProvider>
         </div>
         <div className='flex_row align_center flex_1 justify_end'>
           <Button type='primary'>

@@ -206,6 +206,21 @@ class List extends Page {
     this.initColumns()
   }
 
+  reset() {
+    this.setState({
+      filter: {
+        status: undefined,
+        role: undefined,
+        startRange: null,
+        endRange: null,
+        name: null,
+        phone: null
+      }
+    }, () => {
+      this.search()
+    })
+  }
+
   editItems(id, key, value) {
     var ids = []
     if (Array.isArray(id)) {

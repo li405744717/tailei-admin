@@ -13,6 +13,8 @@ import Page from "../../basic/page/Page";
 import moment from 'moment';
 import {Input, Select} from "antd";
 import filters from '@/common/filters'
+import payAPI from '@/commAction/pay'
+import utils from "../../../common/utils";
 
 const {Option} = Select;
 export const PAY_SOURCE = [
@@ -24,8 +26,14 @@ export const PAY_SOURCE = [
 export const PAY_STATUS = [
   {title: '全部', key: 'all'},
   {title: '已缴费', key: 'success'},
-  {title: '未缴费', key: 'fail'},
+  {title: '未缴费', key: 'wait'},
 ]
+
+export const PAY_STATUS_ACTION = [
+  {title: '已缴费', key: 'success'},
+  {title: '未缴费', key: 'wait'},
+]
+
 
 let sections = [
   {
@@ -67,7 +75,7 @@ export class PayListEdit extends React.Component {
     status: undefined
   }
   static propTypes = {
-    amount: PropTypes.string,
+    amount: PropTypes.number,
     status: PropTypes.string
   }
   state = {
@@ -130,7 +138,7 @@ export class PayListEdit extends React.Component {
           }}
         >
           {
-            PAY_SOURCE.map((item, index) => {
+            PAY_STATUS_ACTION.map((item, index) => {
               return <Option key={`option_${index}`} value={item.key}>{item.title}</Option>
             })
           }
@@ -146,7 +154,7 @@ export class PayListEditAll extends React.Component {
     count: 0
   }
   static propTypes = {
-    amount: PropTypes.string,
+    amount: PropTypes.number,
     count: PropTypes.number
   }
   state = {
@@ -214,7 +222,7 @@ export class PayListEditAll extends React.Component {
           }}
         >
           {
-            PAY_SOURCE.map((item, index) => {
+            PAY_STATUS_ACTION.map((item, index) => {
               return <Option key={`option_${index}`} value={item.key}>{item.title}</Option>
             })
           }
@@ -249,7 +257,7 @@ class List extends Page {
     showEdit: false,
     showEditAll: false,
     totalAmount: 0,
-    selectedRowKeys:[]
+    selectedRowKeys: []
   }
 
   constructor(props, context) {
@@ -273,48 +281,39 @@ class List extends Page {
 
   initColumns() {
 
-    var contents = [
-      [
-        {data: [{text: '1'}]},
-        {data: [{text: 'XX'}]},
-        {data: [{text: '134****1234'}]},
-        {data: [{text: 'XX花园'}]},
-        {data: [{text: '1单元-1号楼-302室'}]},
-        {data: [{text: '线上'}]},
-        {data: [{text: '已缴费'}]},
-        {data: [{text: '2020-02-26  16:32:42'}]},
-        {data: [{text: '300.00'}]},
-        {id: 1, status: 'success'}
-      ],
-      [
-        {data: [{text: '1'}]},
-        {data: [{text: 'XX'}]},
-        {data: [{text: '134****1234'}]},
-        {data: [{text: 'XX花园'}]},
-        {data: [{text: '1单元-1号楼-302室'}]},
-        {data: [{text: '-'}]},
-        {data: [{text: '未交费'}]},
-        {data: [{text: '2020-02-26  16:32:42'}]},
-        {data: [{text: '300.00'}]},
-        {id: 2, status: 'fail'}
-      ],
-      [
-        {data: [{text: '1'}]},
-        {data: [{text: 'XX'}]},
-        {data: [{text: '134****1234'}]},
-        {data: [{text: 'XX花园'}]},
-        {data: [{text: '1单元-1号楼-302室'}]},
-        {data: [{text: '线上'}]},
-        {data: [{text: '已缴费'}]},
-        {data: [{text: '2020-02-26  16:32:42'}]},
-        {data: [{text: '230.90'}]},
-        {id: 3, status: 'success'}
-      ]
-    ]
-    let {table} = this.state
-    table.contents = contents
-    this.setState({
-      table
+    let {filter} = this.state
+    console.log('filter', filter)
+    var period = (filter.startRange || filter.endRange) ? (filter.startRange || '' + '::' + filter.endRange || '') : null
+    var param = {
+      name: filter.name,
+      phone: filter.phone,
+      charge_way: filter.source === 'all' ? undefined : filter.source,
+      charge_status: filter.status === 'all' ? undefined : filter.status,
+      charge_period: period
+    }
+    console.log(param)
+    var contents = []
+    payAPI.pay_list(param).then(data => {
+      for (var item of data.data) {
+        contents.push([
+          {data: [{text: item.id}]},
+          {data: [{text: item.name}]},
+          {data: [{text: item.phone}]},
+          {data: [{text: item.address || '--'}]},
+          {data: [{text: item.house || '--'}]},
+          {data: [{text: item.charge_way || '--'}]},
+          {data: [{text: item.charge_status === 'wait' ? '未缴费' : '已缴费'}]},
+          {data: [{text: item.charge_period}]},
+          {data: [{text: item.unit_fee || 0}]},
+          {id: item.id, status: item.charge_status}
+        ])
+      }
+      let {table} = this.state
+      table.contents = contents
+      table.count = data.count
+      this.setState({
+        table
+      })
     })
   }
 
@@ -398,17 +397,78 @@ class List extends Page {
     this.setShowEditAll(false)
   }
   editOK = (e) => {
-    console.log(this.refs.payListEdit.state.form)
+    console.log(this.refs.payListEdit.state.form, this.state.editItem[9].id)
+    var form = this.refs.payListEdit.state.form
     this.setShowEdit(false)
+    this.editItems(this.state.editItem[9].id, ['unit_fee', 'charge_status'], [parseFloat(form.amount), form.status])
   }
   editOKAll = (e) => {
-    console.log(this.refs.payListEditAll.state.form)
+    console.log(this.refs.payListEditAll.state.form, this.state.selectedRowKeys)
+    var form = this.refs.payListEditAll.state.form
+    var contents = this.state.table.contents
+    var ids = this.state.selectedRowKeys.map(item => {
+      return contents[item][9].id
+    })
+    this.editItems(ids, ['charge_status'], [form.status])
     this.setShowEditAll(false)
   }
 
   setShowEdit(flag) {
     this.setState({
       showEdit: flag
+    })
+  }
+
+  search() {
+    this.initColumns()
+  }
+
+  reset() {
+    this.setState({
+      filter: {
+        status: undefined,
+        startRange: null,
+        endRange: null,
+        name: null,
+        phone: null,
+        source: undefined
+      }
+    }, () => {
+      this.search()
+    })
+  }
+
+  editItems(id, key, value) {
+    var ids = []
+    if (Array.isArray(id)) {
+      ids = id
+    } else {
+      ids = [id]
+    }
+    var paras = {}
+    if (Array.isArray(key)) {
+      for (var index in key) {
+        var _key = key[index]
+        paras[_key] = value[index]
+      }
+    } else {
+      paras[key] = value
+    }
+    var param = {
+      paras,
+      ids
+    }
+    var api
+    if (value === 'delete') {
+      api = (param) => payAPI.pay_edit(param)
+    } else {
+      api = (param) => payAPI.pay_edit(param)
+    }
+    api(param).then(data => {
+      utils.showToast('操作成功')
+      this.initColumns()
+    }).catch(e => {
+      utils.showToast('操作失败,请重试')
     })
   }
 }

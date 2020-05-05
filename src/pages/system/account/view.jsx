@@ -68,7 +68,7 @@ export default function renderView(page) {
           <Button type='primary' onClick={() => page.search()}>
             <span className='white'>查询</span>
           </Button>
-          <Button className='margin_left_16'>
+          <Button className='margin_left_16' onClick={() => page.reset()}>
             <span>重置</span>
           </Button>
         </div>

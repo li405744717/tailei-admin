@@ -11,6 +11,7 @@ import wx from '@/common/wx'
 import renderView from "./view";
 import Page from "../../basic/page/Page";
 import moment from 'moment';
+import repairAPI from '@/commAction/repair'
 
 export const REPAIR_MAN = [
   {title: 'yyy-134***0000', key: 1},
@@ -65,11 +66,13 @@ class List extends Page {
     },
     filter: {
       status: 'all',
-      repair_man_id:undefined
+      repair_man_id: undefined
     },
     editItem: null,
     showEdit: false,
     uploadToast: false,
+
+    repair_man_list: []
   }
 
   constructor(props, context) {
@@ -89,52 +92,56 @@ class List extends Page {
 
   onLoad(props) {
     this.initColumns()
+    this.initRepairManList()
+  }
+
+  initRepairManList() {
+    repairAPI.repair_man_list().then(data => {
+      this.setState({
+        repair_man_list: data.data.map(item => {
+          return {title: item.name + '-' + item.phone, key: item.id}
+        })
+      })
+    })
   }
 
   initColumns() {
 
-    var contents = [
-      [
-        {data: [{text: '1'}]},
-        {data: [{text: 'XX'}, {text: '134****1234'}]},
-        {data: [{text: '聊城-冠县-XX街道'}, {text: 'XX花园 1单元-1号楼-302室'}]},
-        {data: [{text: '报修时间:2020-04-14 16:56:33'}, {text: '预约时间:2020-04-14 16:56:33'}]},
-        {data: [{text: '待分配'}, {text: '--'}], status: 'distribute', repair_man_id: 1},
-        {data: [{text: '--'}, {text: '--'}]},
-        {id: 1}
-      ],
-      [
-        {data: [{text: '2'}]},
-        {data: [{text: 'XX'}, {text: '134****1234'}]},
-        {data: [{text: '聊城-冠县-XX街道'}, {text: 'XX花园 1单元-1号楼-302室'}]},
-        {data: [{text: '报修时间:2020-04-14 16:56:33'}, {text: '预约时间:2020-04-14 16:56:33'}]},
-        {data: [{text: '待维修'}, {text: 'XXX:199****1234'}], status: 'repairing', repair_man_id: 1},
-        {data: [{text: '--'}, {text: '--'}]},
-        {id: 2}
-      ],
-      [
-        {data: [{text: '3'}]},
-        {data: [{text: 'XX'}, {text: '134****1234'}]},
-        {data: [{text: '聊城-冠县-XX街道'}, {text: 'XX花园 1单元-1号楼-302室'}]},
-        {data: [{text: '报修时间:2020-04-14 16:56:33'}, {text: '预约时间:2020-04-14 16:56:33'}]},
-        {data: [{text: '已维修'}, {text: 'XXX:199****1234'}], status: 'complete', repair_man_id: 1},
-        {data: [{text: '--'}, {text: '--'}]},
-        {id: 3}
-      ],
-      [
-        {data: [{text: '4'}]},
-        {data: [{text: 'XX'}, {text: '134****1234'}]},
-        {data: [{text: '聊城-冠县-XX街道'}, {text: 'XX花园 1单元-1号楼-302室'}]},
-        {data: [{text: '报修时间:2020-04-14 16:56:33'}, {text: '预约时间:2020-04-14 16:56:33'}]},
-        {data: [{text: '已维修'}, {text: 'XXX:199****1234'}], status: 'complete', repair_man_id: 1},
-        {data: [{text: '已支付'}, {text: '线下支付:200'}]},
-        {id: 4}
-      ]
-    ]
-    let {table} = this.state
-    table.contents = contents
-    this.setState({
-      table
+    let {filter} = this.state
+    console.log('filter', filter)
+    let status_item = REPAIR_STATUS.find(item => {
+      return item.key === filter.status
+    })
+    var param = {
+      contact: filter.phone,
+    }
+    if (status_item) {
+      param.repair_status = status_item.title
+    }
+
+    var contents = []
+    repairAPI.repair_list(param).then(data => {
+      for (var item of data.data) {
+        contents.push([
+          {data: [{text: '1'}]},
+          {data: [{text: item.name}, {text: item.contact}]},
+          {data: [{text: item.address}, {text: '-'}]},
+          {data: [{text: item.reserve_time || '--'}, {text: item.order_time || '--'}]},
+          {
+            data: [{text: item.repair_status}, {text: item.worker}],
+            status: item.repair_status === '待处理' ? 'distribute' : 'repairing',
+            repair_man_id: 1
+          },
+          {data: [{text: item.charge_status}, {text: item.repair_free || '--'}]},
+          {id: 1}
+        ])
+      }
+      let {table} = this.state
+      table.contents = contents
+      table.count = data.count
+      this.setState({
+        table
+      })
     })
   }
 
@@ -173,7 +180,9 @@ class List extends Page {
   handleSizeChange = (e) => {
     var {filter} = this.state
     filter.status = e.target.value
-    this.setState({filter});
+    this.setState({filter}, () => {
+      this.search()
+    });
   }
 
   onChangeDate(date) {
@@ -185,8 +194,10 @@ class List extends Page {
 
   onChangeSelect = (value) => {
     var {filter} = this.state
-    filter.house_type = value
-    this.setState({filter});
+    filter.repair_man_id = value
+    this.setState({filter}, () => {
+      this.search()
+    });
   }
 
   onChangeInput(e, key) {
@@ -210,6 +221,18 @@ class List extends Page {
   editOK = (e) => {
     console.log(this.refs.houseEdit.state.form)
     this.setShowEdit(false)
+    var param = {
+      "ids": [
+        1
+      ],
+      "action": "UPDATE",
+      "paras": {
+        "contact": "18321337553"
+      }
+    }
+    repairAPI.repair_update().then(data => {
+
+    })
   }
 
   setShowEdit(flag) {
@@ -227,6 +250,21 @@ class List extends Page {
   uploadOK = (e) => {
     console.log(this.refs.houseUpload.fundList)
     this.setUploadToast(false)
+  }
+
+  search() {
+    this.initColumns()
+  }
+
+  reset() {
+    this.setState({
+      filter: {
+        status: 'all',
+        repair_man_id: undefined
+      }
+    }, () => {
+      this.search()
+    })
   }
 }
 

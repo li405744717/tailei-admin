@@ -10,6 +10,8 @@ import PropTypes from 'prop-types'
 import wx from '@/common/wx'
 import renderView from "./view";
 import Page from "../../basic/page/Page";
+import houseAPI from '@/commAction/house'
+import utils from "../../../common/utils";
 
 
 let sections = [
@@ -122,22 +124,50 @@ class ListInfo extends Page {
   }
 
   onLoad(props) {
+    let options = props.match.params
+    this.code = options.code
+    this.htmlParam = {};
+    this.props.location.search.replace(/([^?&=]+)=([^&]+)/g, (_, k, v) => this.htmlParam[k] = v);
 
-    var {form, table} = this.state
-    var roles = form.roles
-    var contents = []
-    for (var item of roles) {
-      contents.push([
-        {data: [{text: item.id}]},
-        {avatarUrl: item.avatar},
-        {data: [{text: item.name}]},
-        {data: [{text: item.phone}]},
-        {data: [{text: item.role}]}
-      ])
-    }
-    table.contents = contents
-    this.setState({
-      table
+    var params = {id: this.code}
+    houseAPI.house_info(params).then(data => {
+      var contents = []
+      data = data.data
+      var item = data
+      console.log(data)
+      var {table} = this.state
+      for (var _item of data.members) {
+        contents.push([
+          {data: [{text: _item.id}]},
+          {avatarUrl: _item.avatar},
+          {data: [{text: _item.name}]},
+          {data: [{text: _item.phone}]},
+          {data: [{text: _item.role}]}
+        ])
+      }
+      table.contents = contents
+      this.setState({
+        table,
+        form: {
+          name: item.name,
+          phone: item.phone,
+          address: item.city,
+          apartment: item.court,
+          house: item.house,
+          house_type: 'zhuzhai',
+          house_intro: '两室一厅',
+          area: item.area + '平',
+          floor: '6层',
+          direction: '朝南',
+          pay_way: '2000/月,押一付三',
+          renovation_way: '毛坯房',
+          images: ['https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png', 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png', 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',],
+
+        }
+      })
+    }).catch(e => {
+      utils.showToast('出错了')
+      console.log('error', e)
     })
   }
 

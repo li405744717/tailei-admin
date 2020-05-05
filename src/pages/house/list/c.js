@@ -11,6 +11,8 @@ import wx from '@/common/wx'
 import renderView from "./view";
 import Page from "../../basic/page/Page";
 import moment from 'moment';
+import houseAPI from '@/commAction/house'
+import utils from "../../../common/utils";
 
 export const HOUSE_TYPES = [
   {title: '全部类型', key: 'all'},
@@ -100,42 +102,38 @@ class List extends Page {
 
   initColumns() {
 
-    var contents = [
-      [
-        {data: [{text: '1'}]},
-        {data: [{text: 'XX'}]},
-        {data: [{text: '13300001234'}]},
-        {data: [{text: '聊城-冠县-XX街道'}]},
-        {data: [{text: 'XX花园'}]},
-        {data: [{text: '1单元-1号楼-302室'}]},
-        {data: [{text: '80.51'}]},
-        {id: 1}
-      ],
-      [
-        {data: [{text: '1'}]},
-        {data: [{text: 'XX'}]},
-        {data: [{text: '13300001234'}]},
-        {data: [{text: '聊城-冠县-XX街道'}]},
-        {data: [{text: 'XX花园'}]},
-        {data: [{text: '1单元-1号楼-302室'}]},
-        {data: [{text: '80.51'}]},
-        {id: 2}
-      ],
-      [
-        {data: [{text: '1'}]},
-        {data: [{text: 'XX'}]},
-        {data: [{text: '13300001234'}]},
-        {data: [{text: '聊城-冠县-XX街道'}]},
-        {data: [{text: 'XX花园'}]},
-        {data: [{text: '1单元-1号楼-302室'}]},
-        {data: [{text: '80.51'}]},
-        {id: 3}
-      ]
-    ]
-    let {table} = this.state
-    table.contents = contents
-    this.setState({
-      table
+
+    let {filter} = this.state
+    console.log('filter', filter)
+    var areaRange = (filter.startArea || filter.endArea) ? (filter.startArea || '' + '::' + filter.endArea || '') : null
+    var param = {
+      house_type: filter.house_type === 'all' ? undefined : filter.source,
+      startArea: null,
+      area: areaRange,
+      owner: filter.name,
+      contact: filter.phone,
+    }
+    console.log(param)
+    var contents = []
+    houseAPI.house_list(param).then(data => {
+      for (var item of data.data) {
+        contents.push([
+          {data: [{text: item.id}]},
+          {data: [{text: item.owner}]},
+          {data: [{text: item.contact}]},
+          {data: [{text: item.city}]},
+          {data: [{text: item.court}]},
+          {data: [{text: item.house}]},
+          {data: [{text: item.area}]},
+          {id: item.id}
+        ])
+      }
+      let {table} = this.state
+      table.contents = contents
+      table.count = data.count
+      this.setState({
+        table
+      })
     })
   }
 
@@ -209,8 +207,11 @@ class List extends Page {
     this.setShowEdit(false)
   }
   editOK = (e) => {
-    console.log(this.refs.houseEdit.state.form)
+    // console.log(this.refs.houseEdit.state.form, this.state.editItem[7].id)
+    var form = this.refs.houseEdit.state.form
     this.setShowEdit(false)
+    this.editItems(this.state.editItem[7].id, ['owner', 'contact', 'area'], [form.name, form.phone, parseFloat(form.area)])
+
   }
 
   setShowEdit(flag) {
@@ -228,6 +229,60 @@ class List extends Page {
   uploadOK = (e) => {
     console.log(this.refs.houseUpload.fundList)
     this.setUploadToast(false)
+  }
+
+  search() {
+    this.initColumns()
+  }
+
+
+  reset() {
+    this.setState({
+      filter: {
+        house_type: 'all',
+        status: 'all',
+        startArea: null,
+        endArea: null,
+        name: null,
+        phone: null,
+      }
+    }, () => {
+      this.search()
+    })
+  }
+
+  editItems(id, key, value) {
+    var ids = []
+    if (Array.isArray(id)) {
+      ids = id
+    } else {
+      ids = [id]
+    }
+    var paras = {}
+    if (Array.isArray(key)) {
+      for (var index in key) {
+        var _key = key[index]
+        paras[_key] = value[index]
+      }
+    } else {
+      paras[key] = value
+    }
+    var param = {
+      paras,
+      ids
+    }
+    var api
+    if (value === 'delete') {
+      api = (param) => houseAPI.house_edit(param)
+    } else {
+      api = (param) => houseAPI.house_edit(param)
+    }
+    api(param).then(data => {
+      utils.showToast('操作成功')
+      this.initColumns()
+    }).catch(e => {
+      utils.showToast('操作失败,请重试')
+    })
   }
 }
 

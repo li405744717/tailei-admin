@@ -7,7 +7,6 @@ import {Button, Icon, Checkbox, Input, Radio, DatePicker, Select, Modal} from "a
 import CusPCTable from "../../../components/table-pc-c/c";
 import {REPAIR_MAN, REPAIR_STATUS} from '@/pages/repair/list/c'
 import PropTypes from "prop-types";
-import UploadC from "../../../components/upload-c/c";
 
 const {Option} = Select;
 const {RangePicker} = DatePicker;
@@ -100,7 +99,7 @@ class RepairListEdit extends React.Component {
 export default function renderView(page) {
 
   const {user} = page.props
-  const {table, selectedRowKeys, filter, showEdit, editItem, uploadToast} = page.state
+  const {table, selectedRowKeys, filter, showEdit, editItem, uploadToast,repair_man_list} = page.state
   const {showFilter} = page.props
   const columnRenderObj = {
     buttons: (content, record, rowIndex) => {
@@ -149,17 +148,17 @@ export default function renderView(page) {
             }}
           >
             {
-              REPAIR_MAN.map((item, index) => {
+              repair_man_list.map((item, index) => {
                 return <Option key={`option_${index}`} value={item.key}>{item.title}</Option>
               })
             }
           </Select>
         </div>
         <div className='flex_row align_center flex_2 justify_end'>
-          <Button type='primary'>
+          <Button type='primary' onClick={() => page.search()}>
             <span className='white'>查询</span>
           </Button>
-          <Button className='margin_left_16'>
+          <Button className='margin_left_16' onClick={() => page.reset()}>
             <span>重置</span>
           </Button>
         </div>

@@ -13,6 +13,8 @@ import Page from "../../basic/page/Page";
 import moment from 'moment';
 import {Input, Select} from "antd";
 import filters from '@/common/filters'
+import payAPI from '@/commAction/pay'
+import utils from "../../../common/utils";
 
 const {Option} = Select;
 
@@ -144,30 +146,25 @@ class List extends Page {
 
   initColumns() {
 
-    var contents = [
-      [
-        {data: [{text: '1'}]},
-        {data: [{text: 'XX花园'}]},
-        {data: [{text: '3.00'}]},
-        {id: 1}
-      ],
-      [
-        {data: [{text: '2'}]},
-        {data: [{text: 'XX花园'}]},
-        {data: [{text: '3.00'}]},
-        {id: 2}
-      ],
-      [
-        {data: [{text: '3'}]},
-        {data: [{text: 'XX花园'}]},
-        {data: [{text: '1.35'}]},
-        {id: 3}
-      ]
-    ]
-    let {table} = this.state
-    table.contents = contents
-    this.setState({
-      table
+    let {filter} = this.state
+    var param = {}
+    console.log(param)
+    var contents = []
+    payAPI.pay_set_list(param).then(data => {
+      for (var item of data.data) {
+        contents.push([
+          {data: [{text: item.id}]},
+          {data: [{text: item.court}]},
+          {data: [{text: item.unit_fee}]},
+          {id: item.id}
+        ])
+      }
+      let {table} = this.state
+      table.contents = contents
+      table.count = data.count
+      this.setState({
+        table
+      })
     })
   }
 
@@ -251,14 +248,50 @@ class List extends Page {
     this.setShowEditAll(false)
   }
   editOK = (e) => {
-    console.log(this.refs.paySetEdit.state.form)
+    console.log(this.refs.paySetEdit.state.form, this.state.editItem[3].id)
+    var form = this.refs.paySetEdit.state.form
     this.setShowEdit(false)
+    this.editItems(this.state.editItem[3].id, ['unit_fee'], [parseFloat(form.price)])
   }
 
 
   setShowEdit(flag) {
     this.setState({
       showEdit: flag
+    })
+  }
+
+  editItems(id, key, value) {
+    var ids = []
+    if (Array.isArray(id)) {
+      ids = id
+    } else {
+      ids = [id]
+    }
+    var paras = {}
+    if (Array.isArray(key)) {
+      for (var index in key) {
+        var _key = key[index]
+        paras[_key] = value[index]
+      }
+    } else {
+      paras[key] = value
+    }
+    var param = {
+      paras,
+      ids
+    }
+    var api
+    if (value === 'delete') {
+      api = (param) => payAPI.pay_set_edit(param)
+    } else {
+      api = (param) => payAPI.pay_set_edit(param)
+    }
+    api(param).then(data => {
+      utils.showToast('操作成功')
+      this.initColumns()
+    }).catch(e => {
+      utils.showToast('操作失败,请重试')
     })
   }
 }

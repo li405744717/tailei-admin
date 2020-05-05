@@ -72,10 +72,10 @@ export default function renderView(page) {
         {
           !showFilter ?
             <div className='flex_row align_center flex_1 justify_end'>
-              <Button type='primary'>
+              <Button type='primary' onClick={() => page.search()}>
                 <span className='white'>查询</span>
               </Button>
-              <Button className='margin_left_16'>
+              <Button className='margin_left_16' onClick={() => page.reset()}>
                 <span>重置</span>
               </Button>
               <Button type='link' className='flex_row center margin_left_40' onClick={() => page.setShowFilter(true)}>
@@ -137,10 +137,10 @@ export default function renderView(page) {
             </div>
 
             <div className='flex_row align_center flex_1 justify_end'>
-              <Button type='primary'>
+              <Button type='primary' onClick={() => page.search()}>
                 <span className='white'>查询</span>
               </Button>
-              <Button className='margin_left_16'>
+              <Button className='margin_left_16' onClick={() => page.reset()}>
                 <span>重置</span>
               </Button>
               <Button type='link' className='flex_row center margin_left_40' onClick={() => page.setShowFilter(false)}>
