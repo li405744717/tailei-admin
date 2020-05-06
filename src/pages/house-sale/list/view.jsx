@@ -3,19 +3,25 @@
  */
 import React from 'react'
 import "./view.scss"
-import {Button, Icon, Checkbox, Input, Radio} from "antd";
+import {Button, Icon, Checkbox, Input, Radio, Select} from "antd";
 import CusPCTable from "../../../components/table-pc-c/c";
+import {ROLES} from "../../system/account/c";
+import {SALE_STATUS} from "./c";
+import {HOUSE_TYPES} from "../../suggest/info/c";
 
+const {Option} = Select;
 export default function renderView(page) {
 
   const {user} = page.props
-  const {table, selectedRowKeys, status} = page.state
+  const {table, selectedRowKeys, status, filter, consultants} = page.state
   const {showFilter} = page.props
   const columnRenderObj = {
     buttons: (content, record, rowIndex) => {
       return <div className='flex_row align_center justify_end'>
         <Button type={"link"}>修改</Button>
+        <div className='button_fg_line'/>
         <Button type={"link"}>{content.status === 'up' ? '下架' : '上架'}</Button>
+        <div className='button_fg_line'/>
         <Button type={"link"}>删除</Button>
       </div>
     }
@@ -30,19 +36,19 @@ export default function renderView(page) {
       <div className='flex_row align_center'>
         <div className='flex_row align_center flex_1'>
           <span>姓名：</span>
-          <Input className='house_sale_input_view'/>
+          <Input value={filter.name} placeholder='请输入' onChange={e => page.onChangeInput(e, 'name')} className='house_sale_input_view'/>
         </div>
         <div className='flex_row align_center flex_1'>
           <span>电话：</span>
-          <Input className='house_sale_input_view'/>
+          <Input value={filter.phone} placeholder='请输入' onChange={e => page.onChangeInput(e, 'phone')} className='house_sale_input_view'/>
         </div>
         {
           !showFilter ?
             <div className='flex_row align_center flex_1 justify_end'>
-              <Button type='primary'>
+              <Button type='primary' onClick={() => page.search()}>
                 <span className='white'>查询</span>
               </Button>
-              <Button className='margin_left_16'>
+              <Button className='margin_left_16' onClick={() => page.reset()}>
                 <span>重置</span>
               </Button>
               <Button type='link' className='flex_row center margin_left_40' onClick={() => page.setShowFilter(true)}>
@@ -52,7 +58,23 @@ export default function renderView(page) {
             </div> :
             <div className='flex_row align_center flex_1 justify_end'>
               <span>房源类型：</span>
-              <Input className='house_sale_input_view'/>
+              <Select
+                showSearch
+                value={filter.house_type}
+                style={{width: 240}}
+                placeholder="全部"
+                optionFilterProp="children"
+                onChange={e => page.onChangeSelect(e, 'house_type')}
+                filterOption={(input, option) => {
+                  return option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                }}
+              >
+                {
+                  HOUSE_TYPES.map((item, index) => {
+                    return <Option key={`option_${index}`} value={item.key}>{item.title}</Option>
+                  })
+                }
+              </Select>
             </div>
         }
       </div>
@@ -61,13 +83,29 @@ export default function renderView(page) {
           <div className='flex_row align_center margin_top_32'>
             <div className='flex_row align_center flex_2'>
               <span>顾问：</span>
-              <Input className='house_sale_input_view'/>
+              <Select
+                showSearch
+                value={filter.consultant}
+                style={{width: 240}}
+                placeholder="全部"
+                optionFilterProp="children"
+                onChange={e => page.onChangeSelect(e, 'consultant')}
+                filterOption={(input, option) => {
+                  return option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                }}
+              >
+                {
+                  consultants.map((item, index) => {
+                    return <Option key={`option_${index}`} value={item.key}>{item.title}</Option>
+                  })
+                }
+              </Select>
             </div>
             <div className='flex_row align_center flex_1 justify_end'>
-              <Button type='primary'>
+              <Button type='primary' onClick={() => page.search()}>
                 <span className='white'>查询</span>
               </Button>
-              <Button className='margin_left_16'>
+              <Button className='margin_left_16' onClick={() => page.reset()}>
                 <span>重置</span>
               </Button>
               <Button type='link' className='flex_row center margin_left_40' onClick={() => page.setShowFilter(false)}>

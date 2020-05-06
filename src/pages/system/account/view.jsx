@@ -26,7 +26,7 @@ export default function renderView(page) {
         <Button type={"link"}
                 onClick={() => page.editItems(content.id, 'status', content.status === 'on' ? 'off' : 'on')}>{content.status === 'off' ? '启用' : '停用'}</Button>
         <div className='button_fg_line'/>
-        <Button type={"link"}>
+        <Button type={"link"}  onClick={() => page.editItems(content.id, 'status', 'delete')}>
           <span className="primary">删除</span>
         </Button>
       </div>

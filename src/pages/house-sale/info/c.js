@@ -11,18 +11,20 @@ import wx from '@/common/wx'
 import renderView from "./view";
 import Page from "../../basic/page/Page";
 import moment from 'moment';
+import saleAPI from '@/commAction/sale'
+import utils from "../../../common/utils";
 
 export const HOUSE_TYPES = [
   {title: '全部类型', key: 'all'},
-  {title: '住宅/居民楼', key: 'zhuzhai'},
-  {title: '办公楼/写字楼/商铺', key: 'bangonglou'},
-  {title: '停车位', key: 'car'}
+  {title: '住宅/居民楼', key: 'house'},
+  {title: '办公楼/写字楼/商铺', key: 'work'},
+  {title: '停车位', key: 'park'}
 ]
 
 export const HOUSE_STATUS = [
-  {title: '待审核', key: 'waiting'},
-  {title: '已通过', key: 'success'},
-  {title: '未通过', key: 'fail'},
+  {title: '待审核', key: 'uncensored'},
+  {title: '已通过', key: 'published'},
+  {title: '未通过', key: 'rejected'},
 ]
 
 let sections = [
@@ -64,7 +66,7 @@ class List extends Page {
 
     },
     filter: {
-      house_type: 'all',
+      house_type: undefined,
       status: 'all',
       startRange: null,
       endRange: null,
@@ -95,40 +97,38 @@ class List extends Page {
   }
 
   initColumns() {
+    let {filter} = this.state
+    console.log('filter', filter)
 
-    var contents = [
-      [
-        {data: [{text: '1'}]},
-        {data: [{text: '业主'}, {text: '联系电话'}]},
-        {data: [{text: '聊城-冠县-XX街道'}, {text: 'XX花园 1单元-1号楼-302室'}]},
-        {data: [{text: '停车位'}]},
-        {data: [{text: '2020-02-26  16:32:42'}]},
-        {data: [{text: '待审核'}]},
-        {status: 'waiting', id: 1}
-      ],
-      [
-        {data: [{text: '2'}]},
-        {data: [{text: '业主'}, {text: '联系电话'}]},
-        {data: [{text: '聊城-冠县-XX街道'}, {text: 'XX花园 1单元-1号楼-302室'}]},
-        {data: [{text: '停车位'}]},
-        {data: [{text: '2020-02-26  16:32:42'}]},
-        {data: [{text: '已通过'}]},
-        {status: 'success', id: 2}
-      ],
-      [
-        {data: [{text: '2'}]},
-        {data: [{text: '业主'}, {text: '联系电话'}]},
-        {data: [{text: '聊城-冠县-XX街道'}, {text: 'XX花园 1单元-1号楼-302室'}]},
-        {data: [{text: '停车位'}]},
-        {data: [{text: '2020-02-26  16:32:42'}]},
-        {data: [{text: '未通过'}]},
-        {status: 'fail', id: 3}
-      ]
-    ]
-    let {table} = this.state
-    table.contents = contents
-    this.setState({
-      table
+    var timeRange = (filter.startRange || filter.endRange) ? ((filter.startRange || '').format('YYYY-MM-DD') + '::' + (filter.endRange || '').format('YYYY-MM-DD')) : null
+    var param = {
+      pubilsher: filter.name,
+      contact: filter.phone,
+      rent_type: filter.house_type === 'all' ? undefined : filter.house_type,
+      consultant: filter.consultant,
+      status: filter.status === 'all' ? undefined : filter.status,
+      // publish_time: timeRange
+    }
+
+    var contents = []
+    saleAPI.sale_list(param).then(data => {
+      for (var item of data.data) {
+        contents.push([
+          {data: [{text: item.id}]},
+          {data: [{text: item.publisher}, {text: item.contact}]},
+          {data: [{text: item.address}, {text: '--'}]},
+          {data: [{text: item.rent_type}]},
+          {data: [{text: item.publish_time}]},
+          {data: [{text: item.status}]},
+          {status: item.status === '已发布' ? 'published' : item.status === '待审核' ? 'uncensored' : 'rejected', id: item.id}
+        ])
+      }
+      let {table} = this.state
+      table.contents = contents
+      table.count = data.count
+      this.setState({
+        table
+      })
     })
   }
 
@@ -167,7 +167,9 @@ class List extends Page {
   handleSizeChange = (e) => {
     var {filter} = this.state
     filter.status = e.target.value
-    this.setState({filter});
+    this.setState({filter}, () => {
+      this.search()
+    });
   }
 
   onChangeDate(date) {
@@ -203,12 +205,66 @@ class List extends Page {
   }
   editOK = (e) => {
     console.log(this.refs.houseEdit.state.form)
+    var form = this.refs.houseEdit.state.form
     this.setShowEdit(false)
+    this.editItems(this.state.editItem[6].id, ['status', 'cause'], [form.status, form.cause])
   }
 
   setShowEdit(flag) {
     this.setState({
       showEdit: flag
+    })
+  }
+
+  search() {
+    this.initColumns()
+  }
+
+  reset() {
+    this.setState({
+      filter: {
+        status: undefined,
+        startRange: null,
+        endRange: null,
+        name: null,
+        phone: null
+      }
+    }, () => {
+      this.search()
+    })
+  }
+
+  editItems(id, key, value) {
+    var ids = []
+    if (Array.isArray(id)) {
+      ids = id
+    } else {
+      ids = [id]
+    }
+    var paras = {}
+    if (Array.isArray(key)) {
+      for (var index in key) {
+        var _key = key[index]
+        paras[_key] = value[index]
+      }
+    } else {
+      paras[key] = value
+    }
+    var param = {
+      paras,
+      ids
+    }
+    var api
+    if (value === 'delete') {
+      api = (param) => saleAPI.sale_delete(param)
+    } else {
+      api = (param) => saleAPI.sale_edit(param)
+    }
+    api(param).then(data => {
+      utils.showToast('操作成功')
+      this.initColumns()
+    }).catch(e => {
+      utils.showToast('操作失败,请重试')
     })
   }
 }

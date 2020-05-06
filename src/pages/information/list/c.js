@@ -12,13 +12,7 @@ import renderView from "./view";
 import Page from "../../basic/page/Page";
 import moment from 'moment';
 import informationAPI from '@/commAction/information'
-
-export const INFORMATION_TYPES = [
-  {title: 'yyy-134***0000', key: '1'},
-  {title: 'zzz-134***0000', key: '2'},
-  {title: 'ccc-134***0000', key: '3'},
-  {title: 'xxx-134***0000', key: '4'}
-]
+import utils from "../../../common/utils";
 
 export const INFORMATION_STATUS = [
   {title: '全部', key: 'all'},
@@ -75,11 +69,13 @@ class List extends Page {
     filter: {
       status: 'all',
       startRange: null,
-      endRange: null
+      endRange: null,
+      information_type: undefined
     },
     editItem: null,
     showEdit: false,
     uploadToast: false,
+    informationTypes: []
   }
 
   constructor(props, context) {
@@ -99,6 +95,7 @@ class List extends Page {
 
   onLoad(props) {
     this.initColumns()
+    this.initInformationType()
   }
 
   initColumns() {
@@ -130,6 +127,18 @@ class List extends Page {
       table.count = data.count
       this.setState({
         table
+      })
+    })
+  }
+
+  initInformationType() {
+    informationAPI.information_type_list({}).then(data => {
+      var contents = []
+      for (var item of data.data) {
+        contents.push({title: item.name, key: item.id})
+      }
+      this.setState({
+        informationTypes: contents
       })
     })
   }
@@ -184,7 +193,7 @@ class List extends Page {
 
   onChangeSelect = (value) => {
     var {filter} = this.state
-    filter.house_type = value
+    filter.information_type = value
     this.setState({filter});
   }
 
@@ -232,6 +241,58 @@ class List extends Page {
   onChangeSwitch(e, index) {
     console.log(e, index)
   }
+
+  search() {
+    this.initColumns()
+  }
+
+  reset() {
+    this.setState({
+      filter: {
+        status: 'all',
+        startRange: null,
+        endRange: null,
+        information_type: undefined
+      }
+    }, () => {
+      this.search()
+    })
+  }
+
+  editItems(id, key, value) {
+    var ids = []
+    if (Array.isArray(id)) {
+      ids = id
+    } else {
+      ids = [id]
+    }
+    var paras = {}
+    if (Array.isArray(key)) {
+      for (var index in key) {
+        var _key = key[index]
+        paras[_key] = value[index]
+      }
+    } else {
+      paras[key] = value
+    }
+    var param = {
+      paras,
+      ids
+    }
+    var api
+    if (value === 'delete') {
+      api = (param) => informationAPI.sale_delete(param)
+    } else {
+      api = (param) => informationAPI.sale_edit(param)
+    }
+    api(param).then(data => {
+      utils.showToast('操作成功')
+      this.initColumns()
+    }).catch(e => {
+      utils.showToast('操作失败,请重试')
+    })
+  }
+
 }
 
 

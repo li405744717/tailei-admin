@@ -11,6 +11,7 @@ import wx from '@/common/wx'
 import renderView from "./view";
 import Page from "../../basic/page/Page";
 import moment from 'moment';
+import suggestAPI from '@/commAction/suggest'
 
 export const HOUSE_TYPES = [
   {title: '全部类型', key: 'all'},
@@ -97,6 +98,34 @@ class List extends Page {
   }
 
   initColumns() {
+    let {filter} = this.state
+    console.log('filter', filter)
+    var param = {
+      name: filter.name,
+      role: filter.role === 'all' ? undefined : filter.role
+    }
+
+    var contents = []
+    suggestAPI.suggest_list(param).then(data => {
+      for (var item of data.data) {
+        contents.push([
+          {data: [{text: '1'}]},
+          {data: [{text: 'XX'}]},
+          {data: [{text: '134****1234'}]},
+          {data: [{text: '聊城-冠县-XX街道'}]},
+          {data: [{text: 'XX花园'}]},
+          {data: [{text: '1单元-1号楼-302室'}]},
+          {data: [{text: '2020-02-26  16:32:42'}]},
+          {id: 1}
+        ])
+      }
+      let {table} = this.state
+      table.contents = contents
+      table.count = data.count
+      this.setState({
+        table
+      })
+    })
 
     var contents = [
       [

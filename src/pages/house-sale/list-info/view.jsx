@@ -7,6 +7,7 @@ import {Button, Icon, Checkbox, Input, Radio, Select, Upload, Modal, DatePicker}
 import PropTypes from 'prop-types'
 import CusPCTable from "../../../components/table-pc-c/c";
 import moment from 'moment'
+import E from 'wangeditor'
 
 const {Option} = Select;
 const {RangePicker} = DatePicker;
@@ -399,6 +400,51 @@ export class FormDate extends React.Component {
       <RangePicker className="fund_option_time_picker_view"
                    onChange={e => this.onChangeDate(e)}
                    value={[form.startRange, form.endRange]}/>
+    </div>
+  }
+}
+
+export class FormEdit extends React.Component {
+  static propTypes = {
+    setInputValue: PropTypes.func,
+  }
+
+  static defaultProps = {
+    value: []
+  }
+
+  state = {
+    form: {}
+  }
+
+  UNSAFE_componentWillReceiveProps(newVal, newContext) {
+    this.onLoad(newVal)
+  }
+
+  componentDidMount() {
+    this.onLoad(this.props)
+  }
+
+  onLoad(props) {
+    var {value} = props
+    var {form} = this.state
+
+    if (!this.editor) {
+      this.editor = new E('#editor')
+      this.editor.create()
+    }
+  }
+
+  onChangeDate(date) {
+
+  }
+
+  render() {
+    const {form} = this.state
+    return <div className='cus_form'>
+      <div id="editor">
+        <p>欢迎使用 <b>wangEditor</b> 富文本编辑器</p>
+      </div>
     </div>
   }
 }

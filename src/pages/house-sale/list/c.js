@@ -10,7 +10,15 @@ import PropTypes from 'prop-types'
 import wx from '@/common/wx'
 import renderView from "./view";
 import Page from "../../basic/page/Page";
+import saleAPI from '@/commAction/sale'
+import systemAPI from '@/commAction/system'
+import utils from "../../../common/utils";
 
+export const SALE_STATUS = [
+  {title: '全部', key: 'all'},
+  {title: '上架中', key: 'up'},
+  {title: '下架中', key: 'down'},
+]
 
 let sections = [
   {
@@ -50,6 +58,11 @@ class List extends Page {
       contents: []
 
     },
+    filter: {
+      house_type: undefined,
+      consultant: undefined,
+    },
+    consultants: [],
     status: 'all'
   }
 
@@ -70,43 +83,53 @@ class List extends Page {
 
   onLoad(props) {
     this.initColumns()
+    this.initConsultant()
   }
 
   initColumns() {
+    let {filter} = this.state
+    console.log('filter', filter)
+    var param = {
+      pubilsher: filter.name,
+      contact: filter.phone,
+      rent_type: filter.house_type === 'all' ? undefined : filter.house_type,
+      consultant: filter.consultant
+    }
 
-    var contents = [
-      [
-        {data: [{text: '1'}]},
-        {data: [{text: '业主'}, {text: '联系电话'}]},
-        {data: [{text: '聊城-冠县-XX街道'}, {text: 'XX花园 1单元-1号楼-302室'}]},
-        {data: [{text: '顾问'}, {text: '13022229999'}]},
-        {data: [{text: '停车位'}]},
-        {data: [{text: '下架中'}]},
-        {status: 'success'}
-      ],
-      [
-        {data: [{text: '2'}]},
-        {data: [{text: '业主'}, {text: '联系电话'}]},
-        {data: [{text: '聊城-冠县-XX街道'}, {text: 'XX花园 1单元-1号楼-302室'}]},
-        {data: [{text: '顾问'}, {text: '13022229999'}]},
-        {data: [{text: '停车位'}]},
-        {data: [{text: '下架中'}]},
-        {status: 'fail'}
-      ],
-      [
-        {data: [{text: '2'}]},
-        {data: [{text: '业主'}, {text: '联系电话'}]},
-        {data: [{text: '聊城-冠县-XX街道'}, {text: 'XX花园 1单元-1号楼-302室'}]},
-        {data: [{text: '顾问'}, {text: '13022229999'}]},
-        {data: [{text: '停车位'}]},
-        {data: [{text: '下架中'}]},
-        {status: 'waiting'}
-      ]
-    ]
-    let {table} = this.state
-    table.contents = contents
-    this.setState({
-      table
+    var contents = []
+    saleAPI.sale_list(param).then(data => {
+      for (var item of data.data) {
+        contents.push([
+          {data: [{text: item.id}]},
+          {data: [{text: item.publisher}, {text: item.contact}]},
+          {data: [{text: item.address}, {text: '--'}]},
+          {data: [{text: '顾问'}, {text: '13022229999'}]},
+          {data: [{text: item.rent_type}]},
+          {data: [{text: item.status}]},
+          {status: item.status === '已发布' ? 'up' : 'down'}
+        ])
+      }
+      let {table} = this.state
+      table.contents = contents
+      table.count = data.count
+      this.setState({
+        table
+      })
+    })
+  }
+
+  initConsultant() {
+    var param = {
+      role: 'consultant'
+    }
+    systemAPI.account_list(param).then(data => {
+      var contents = []
+      for (var item of data.data) {
+        contents.push({title: item.name, key: item.id})
+      }
+      this.setState({
+        consultants: contents
+      })
     })
   }
 
@@ -139,6 +162,62 @@ class List extends Page {
 
   handleSizeChange = (e) => {
     this.setState({status: e.target.value});
+  }
+
+  onChangeInput(e, key) {
+    var {filter} = this.state
+    filter[key] = e.target.value
+    this.setState({filter});
+  }
+
+  onChangeSelect = (value, key) => {
+    var {filter} = this.state
+    filter[key] = value
+    this.setState({filter});
+  }
+
+  search() {
+    this.initColumns()
+  }
+
+  reset() {
+    this.setState({
+      filter: {
+        name: null,
+        phone: null,
+        consultant: undefined,
+        house_type: 'all'
+      }
+    }, () => {
+      this.search()
+    })
+  }
+  editItems(id, key, value) {
+    var ids = []
+    if (Array.isArray(id)) {
+      ids = id
+    } else {
+      ids = [id]
+    }
+    var paras = {
+      [key]: value
+    }
+    var param = {
+      paras,
+      ids
+    }
+    var api
+    if (value === 'delete') {
+      api = (param) => saleAPI.sale_delete(param)
+    } else {
+      api = (param) => saleAPI.sale_edit(param)
+    }
+    api(param).then(data => {
+      utils.showToast('操作成功')
+      this.initColumns()
+    }).catch(e => {
+      utils.showToast('操作失败,请重试')
+    })
   }
 }
 

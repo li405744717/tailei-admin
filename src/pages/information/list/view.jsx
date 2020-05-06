@@ -16,7 +16,7 @@ const {RangePicker} = DatePicker;
 export default function renderView(page) {
 
   const {user} = page.props
-  const {table, selectedRowKeys, filter, showEdit, editItem, uploadToast} = page.state
+  const {table, selectedRowKeys, filter, showEdit, editItem, uploadToast,informationTypes} = page.state
   const {showFilter} = page.props
   const columnRenderObj = {
     buttons: (content, record, rowIndex) => {
@@ -51,7 +51,7 @@ export default function renderView(page) {
           <span>分类：</span>
           <Select
             showSearch
-            value={filter.repair_man_id}
+            value={filter.information_type}
             style={{width: 240}}
             placeholder="请输入"
             optionFilterProp="children"
@@ -61,7 +61,7 @@ export default function renderView(page) {
             }}
           >
             {
-              INFORMATION_TYPES.map((item, index) => {
+              informationTypes.map((item, index) => {
                 return <Option key={`option_${index}`} value={item.key}>{item.title}</Option>
               })
             }
@@ -76,10 +76,10 @@ export default function renderView(page) {
           </ConfigProvider>
         </div>
         <div className='flex_row align_center flex_1 justify_end'>
-          <Button type='primary'>
+          <Button type='primary' onClick={() => page.search()}>
             <span className='white'>查询</span>
           </Button>
-          <Button className='margin_left_16'>
+          <Button className='margin_left_16' onClick={() => page.reset()}>
             <span>重置</span>
           </Button>
         </div>

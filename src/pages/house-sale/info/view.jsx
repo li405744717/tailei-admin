@@ -25,7 +25,22 @@ class HouseSaleInfoEdit extends React.Component {
       cause: null
     }
   }
+  UNSAFE_componentWillReceiveProps(newVal, newContext) {
+    this.onLoad(newVal)
+  }
 
+  componentDidMount() {
+    this.onLoad(this.props)
+  }
+
+  onLoad(props) {
+    var {editItem} = props
+    var {form} = this.state
+    form.status = editItem[6].status
+    this.setState({
+      form
+    })
+  }
   onChangeSelect = (value) => {
     var {form} = this.state
     form.status = value
@@ -83,9 +98,10 @@ export default function renderView(page) {
   const columnRenderObj = {
     buttons: (content, record, rowIndex) => {
       return <div className='flex_row align_center justify_end'>
-        <Button type={"link"} onClick={() => content.status === 'waiting' ? page.edit(content.id) : null}>
-          <span className={`${content.status === 'waiting' ? 'primary' : 'black'}`}>修改</span>
+        <Button type={"link"} onClick={() => content.status === 'uncensored' ? page.edit(content.id) : null}>
+          <span className={`${content.status === 'uncensored' ? 'primary' : 'black'}`}>修改</span>
         </Button>
+        <div className='button_fg_line'/>
         <Button type={"link"} className='margin_left_16' onClick={() => page.goInfo(content.id)}>
           <span className='primary'>详情</span>
         </Button>
@@ -113,19 +129,19 @@ export default function renderView(page) {
       <div className='flex_row align_center'>
         <div className='flex_row align_center flex_1'>
           <span>姓名：</span>
-          <Input placeholder='请输入' onChange={e => page.onChangeInput(e, 'name')} className='house_sale_input_view'/>
+          <Input value={filter.name} placeholder='请输入' onChange={e => page.onChangeInput(e, 'name')} className='house_sale_input_view'/>
         </div>
         <div className='flex_row align_center flex_1'>
           <span>电话：</span>
-          <Input placeholder='请输入' onChange={e => page.onChangeInput(e, 'phone')} className='house_sale_input_view'/>
+          <Input value={filter.phone} placeholder='请输入' onChange={e => page.onChangeInput(e, 'phone')} className='house_sale_input_view'/>
         </div>
         {
           !showFilter ?
             <div className='flex_row align_center flex_1 justify_end'>
-              <Button type='primary'>
+              <Button type='primary' onClick={() => page.search()}>
                 <span className='white'>查询</span>
               </Button>
-              <Button className='margin_left_16'>
+              <Button className='margin_left_16' onClick={() => page.reset()}>
                 <span>重置</span>
               </Button>
               <Button type='link' className='flex_row center margin_left_40' onClick={() => page.setShowFilter(true)}>
@@ -165,10 +181,10 @@ export default function renderView(page) {
                            value={[filter.startRange, filter.endRange]}/>
             </div>
             <div className='flex_row align_center flex_1 justify_end'>
-              <Button type='primary'>
+              <Button type='primary' onClick={() => page.search()}>
                 <span className='white'>查询</span>
               </Button>
-              <Button className='margin_left_16'>
+              <Button className='margin_left_16' onClick={() => page.reset()}>
                 <span>重置</span>
               </Button>
               <Button type='link' className='flex_row center margin_left_40' onClick={() => page.setShowFilter(false)}>
@@ -186,9 +202,9 @@ export default function renderView(page) {
 
         <Radio.Group value={filter.status} onChange={page.handleSizeChange}>
           <Radio.Button value="all">全部</Radio.Button>
-          <Radio.Button value="waiting">待审核</Radio.Button>
-          <Radio.Button value="success">已通过</Radio.Button>
-          <Radio.Button value="fail">未通过</Radio.Button>
+          <Radio.Button value="uncensored">待审核</Radio.Button>
+          <Radio.Button value="published">已通过</Radio.Button>
+          <Radio.Button value="rejected">未通过</Radio.Button>
         </Radio.Group>
 
         <Button type='primary' className='flex_row center margin_left_64'>

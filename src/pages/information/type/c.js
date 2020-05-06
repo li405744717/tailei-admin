@@ -11,6 +11,8 @@ import wx from '@/common/wx'
 import renderView from "./view";
 import Page from "../../basic/page/Page";
 import moment from 'moment';
+import informationAPI from '@/commAction/information'
+import utils from "../../../common/utils";
 
 
 let sections = [
@@ -74,30 +76,29 @@ class List extends Page {
 
   initColumns() {
 
-    var contents = [
-      [
-        {data: [{text: '1'}]},
-        {data: [{text: 'XX'}]},
-        {data: [{text: '1'}]},
-        {id: 1}
-      ],
-      [
-        {data: [{text: '2'}]},
-        {data: [{text: 'XX'}]},
-        {data: [{text: '3'}]},
-        {id: 2}
-      ],
-      [
-        {data: [{text: '3'}]},
-        {data: [{text: '官致'}]},
-        {data: [{text: '2'}]},
-        {id: 3}
-      ]
-    ]
-    let {table} = this.state
-    table.contents = contents
-    this.setState({
-      table
+    let {filter} = this.state
+    console.log('filter', filter)
+    var param = {
+      name: filter.name,
+      role: filter.role === 'all' ? undefined : filter.role
+    }
+
+    var contents = []
+    informationAPI.information_type_list(param).then(data => {
+      for (var item of data.data) {
+        contents.push([
+          {data: [{text: item.id}]},
+          {data: [{text: item.name}]},
+          {data: [{text: item.weight}]},
+          {id: item.id}
+        ])
+      }
+      let {table} = this.state
+      table.contents = contents
+      table.count = data.count
+      this.setState({
+        table
+      })
     })
   }
 
@@ -180,14 +181,69 @@ class List extends Page {
   }
   editOK = (e) => {
     console.log(this.refs.houseEdit.state.form)
+    var form = this.refs.houseEdit.state.form
+    var editItem = this.state.editItem
     this.setShowEdit(false)
+
+    if (editItem) {
+      this.editItems(editItem[3].id, ['name', 'weight'], [form.name, form.weight])
+    } else {
+      var param = {
+        name: form.name,
+        weight: form.weight
+      }
+      informationAPI.information_type_create(param).then(data => {
+        utils.showToast(data.detail)
+        this.initColumns()
+      }).catch(e => {
+        utils.showToast('新建失败')
+      })
+    }
+
+
   }
 
   setShowEdit(flag) {
     this.setState({
-      showEdit: flag
+      showEdit: flag,
+      editItem: null
     })
   }
+
+  editItems(id, key, value) {
+    var ids = []
+    if (Array.isArray(id)) {
+      ids = id
+    } else {
+      ids = [id]
+    }
+    var paras = {}
+    if (Array.isArray(key)) {
+      for (var index in key) {
+        var _key = key[index]
+        paras[_key] = value[index]
+      }
+    } else {
+      paras[key] = value
+    }
+    var param = {
+      paras,
+      ids
+    }
+    var api
+    if (value === 'delete') {
+      api = (param) => informationAPI.information_type_delete(param)
+    } else {
+      api = (param) => informationAPI.information_type_edit(param)
+    }
+    api(param).then(data => {
+      utils.showToast('操作成功')
+      this.initColumns()
+    }).catch(e => {
+      utils.showToast('操作失败,请重试')
+    })
+  }
+
 }
 
 

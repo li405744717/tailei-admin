@@ -6,13 +6,13 @@ import "./view.scss"
 import {Button, Icon, Checkbox, Input, Radio, Select, Upload, Modal} from "antd";
 import PropTypes from 'prop-types'
 import CusPCTable from "../../../components/table-pc-c/c";
-import {FormInput, FormRadio, FormImage, FormSelect} from '@/pages/house-sale/list-info/view'
+import {FormInput, FormRadio, FormImage, FormSelect, FormEdit} from '@/pages/house-sale/list-info/view'
 
 
 export default function renderView(page) {
 
   const {} = page.props
-  const {form} = page.state
+  const {form, informationTypes} = page.state
 
   return <div className="page sale_list_info_page padding_LR_48 padding_T_32 flex_column" id="rankPage">
     <div className='flex_column align_center width_100 bg_white padding_TB_64'>
@@ -31,11 +31,14 @@ export default function renderView(page) {
                       <FormRadio options={item.options} value={item.value}
                                  setInputValue={value => page.setFormValue(item.key, value)}/> :
                       item.type === 'select' ?
-                        <FormSelect options={item.options} value={item.value}
+                        <FormSelect options={informationTypes} value={item.value}
                                     setInputValue={value => page.setFormValue(item.key, value)}/> :
                         item.type === 'images' ?
                           <FormImage config={item.config} value={item.value}
-                                     setInputValue={value => page.setFormValue(item.key, value)}/> : null
+                                     setInputValue={value => page.setFormValue(item.key, value)}/> :
+                          item.type === 'edit' ?
+                            <FormEdit config={item.config} value={item.value} ref={'edit'}
+                                      setInputValue={value => page.setFormValue(item.key, value)}/> : null
                 }
               </div>
 

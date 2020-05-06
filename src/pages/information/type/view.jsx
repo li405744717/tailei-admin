@@ -16,7 +16,7 @@ class InformationTypeEdit extends React.Component {
 
   state = {
     form: {
-      title: undefined,
+      name: undefined,
       weight: undefined
     }
   }
@@ -34,8 +34,11 @@ class InformationTypeEdit extends React.Component {
     var {editItem} = props
     var {form} = this.state
     if (editItem) {
-      form.title = editItem[1].data[0].text
+      form.name = editItem[1].data[0].text
       form.weight = editItem[2].data[0].text
+    } else {
+      form.name = undefined
+      form.weight = undefined
     }
 
     this.setState({
@@ -56,7 +59,7 @@ class InformationTypeEdit extends React.Component {
 
       <div className='flex_row align_center'>
         <span className='black'>分类名称：</span>
-        <Input value={form.title} onChange={e => this.onChangeInput(e, 'name')} className='house_sale_input_view'
+        <Input value={form.name} onChange={e => this.onChangeInput(e, 'name')} className='house_sale_input_view'
                placeholder='请输入'/>
       </div>
 
@@ -80,7 +83,8 @@ export default function renderView(page) {
         <Button type={"link"} onClick={() => page.edit(content.id)}>
           <span className="primary">修改</span>
         </Button>
-        <Button type={"link"}>
+        <div className='button_fg_line'/>
+        <Button type={"link"} onClick={() => page.editItems(content.id, [], 'delete')}>
           <span className="primary">删除</span>
         </Button>
       </div>
