@@ -14,7 +14,7 @@ const {RangePicker} = DatePicker;
 
 export default function renderView(page) {
 
-  const {table, selectedRowKeys, filter, showEdit, editItem} = page.state
+  const {table, selectedRowKeys, filter, showEdit, editItem, current_page} = page.state
   const {showFilter} = page.props
   const columnRenderObj = {
     buttons: (content, record, rowIndex) => {
@@ -42,7 +42,7 @@ export default function renderView(page) {
       <div className='flex_row align_center'>
         <div className='flex_row align_center flex_1'>
           <span>标题：</span>
-          <Input placeholder='请输入' onChange={e => page.onChangeInput(e, 'title')} className='house_sale_input_view'/>
+          <Input value={filter.title} placeholder='请输入' onChange={e => page.onChangeInput(e, 'title')} className='house_sale_input_view'/>
         </div>
         <div className='flex_row align_center flex_1 justify_end'>
           <span>位置：</span>
@@ -68,7 +68,7 @@ export default function renderView(page) {
           <Button type='primary' onClick={() => page.search()}>
             <span className='white'>查询</span>
           </Button>
-          <Button className='margin_left_16'>
+          <Button className='margin_left_16' onClick={() => page.reset()}>
             <span>重置</span>
           </Button>
         </div>
@@ -120,7 +120,9 @@ export default function renderView(page) {
               className='primary'>清空</span></Button>
           </div> : null
       }
-      <CusPCTable rowSelection={rowSelection} columnRenderObj={columnRenderObj} chart={table}/>
+      <CusPCTable rowSelection={rowSelection} columnRenderObj={columnRenderObj} chart={table}
+                  current_page={current_page}
+                  onChangePage={_page => page.onChangePage(_page)}/>
     </div>
 
   </div>

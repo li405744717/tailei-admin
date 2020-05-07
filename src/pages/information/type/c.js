@@ -74,13 +74,12 @@ class List extends Page {
     this.initColumns()
   }
 
-  initColumns() {
+  initColumns(page) {
 
     let {filter} = this.state
     console.log('filter', filter)
     var param = {
-      name: filter.name,
-      role: filter.role === 'all' ? undefined : filter.role
+      page
     }
 
     var contents = []
@@ -97,7 +96,8 @@ class List extends Page {
       table.contents = contents
       table.count = data.count
       this.setState({
-        table
+        table,
+        current_page: page
       })
     })
   }

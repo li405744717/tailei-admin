@@ -22,21 +22,21 @@ export default function renderView(page) {
     buttons: (content, record, rowIndex) => {
       return <div className='flex_row align_center justify_end'>
         <Button type={"link"} onClick={() => page.edit(content.id)}>
-          <span className={`${content.status === 'on' ? 'black' : 'primary'}`}>修改</span>
+          <span className={`${content.status === 'up' ? 'black' : 'primary'}`}>修改</span>
         </Button>
         <Button type={"link"} className='margin_left_16'
-                onClick={() => page.editItems(content.id, 'status', content.status === 'on' ? '下架中' : '上架中')}>
-          <span className='primary'>{content.status === 'on' ? '下架' : '上架'}</span>
+                onClick={() => page.editItems(content.id, 'status', content.status === 'up' ? '下架中' : '上架中')}>
+          <span className='primary'>{content.status === 'up' ? '下架' : '上架'}</span>
         </Button>
         <Button type={"link"} className='margin_left_16' onClick={() => page.delete(content.id)}>
-          <span className={`${content.status === 'on' ? 'black' : 'primary'}`}>删除</span>
+          <span className={`${content.status === 'up' ? 'black' : 'primary'}`}>删除</span>
         </Button>
       </div>
     },
     switch: (content, record, rowIndex) => {
       return <div className='flex_row align_center'>
         <Switch disabled={content.status === 'off'} checked={content.home}
-                onChange={e => page.onChangeSwitch(e, rowIndex)}/>
+                onChange={e => page.onChangeSwitch(e, content.id)}/>
       </div>
     }
   }

@@ -14,7 +14,7 @@ const {RangePicker} = DatePicker;
 
 export default function renderView(page) {
 
-  const {table, selectedRowKeys, filter, showEdit, editItem} = page.state
+  const {table, selectedRowKeys, filter, showEdit, editItem, current_page} = page.state
   const {showFilter} = page.props
   const columnRenderObj = {
     buttons: (content, record, rowIndex) => {
@@ -26,7 +26,7 @@ export default function renderView(page) {
         <Button type={"link"}
                 onClick={() => page.editItems(content.id, 'status', content.status === 'on' ? 'off' : 'on')}>{content.status === 'off' ? '启用' : '停用'}</Button>
         <div className='button_fg_line'/>
-        <Button type={"link"}  onClick={() => page.editItems(content.id, 'status', 'delete')}>
+        <Button type={"link"} onClick={() => page.editItems(content.id, 'status', 'delete')}>
           <span className="primary">删除</span>
         </Button>
       </div>
@@ -92,7 +92,9 @@ export default function renderView(page) {
               className='primary'>清空</span></Button>
           </div> : null
       }
-      <CusPCTable rowSelection={rowSelection} columnRenderObj={columnRenderObj} chart={table}/>
+      <CusPCTable rowSelection={rowSelection} columnRenderObj={columnRenderObj} chart={table}
+                  current_page={current_page}
+                  onChangePage={_page => page.onChangePage(_page)}/>
     </div>
 
   </div>

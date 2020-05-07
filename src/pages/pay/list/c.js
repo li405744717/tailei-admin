@@ -279,7 +279,7 @@ class List extends Page {
     this.initColumns()
   }
 
-  initColumns() {
+  initColumns(page) {
 
     let {filter} = this.state
     console.log('filter', filter)
@@ -289,7 +289,9 @@ class List extends Page {
       phone: filter.phone,
       charge_way: filter.source === 'all' ? undefined : filter.source,
       charge_status: filter.status === 'all' ? undefined : filter.status,
-      charge_period: period
+      charge_start: filter.startRange && filter.startRange.format('YYYY-MM-DD'),
+      charge_end: filter.endRange && filter.endRange.format('YYYY-MM-DD'),
+      page
     }
     console.log(param)
     var contents = []
@@ -312,7 +314,8 @@ class List extends Page {
       table.contents = contents
       table.count = data.count
       this.setState({
-        table
+        table,
+        current_page: page
       })
     })
   }

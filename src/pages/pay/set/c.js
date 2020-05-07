@@ -144,10 +144,12 @@ class List extends Page {
     this.initColumns()
   }
 
-  initColumns() {
+  initColumns(page) {
 
     let {filter} = this.state
-    var param = {}
+    var param = {
+      page
+    }
     console.log(param)
     var contents = []
     payAPI.pay_set_list(param).then(data => {
@@ -163,7 +165,8 @@ class List extends Page {
       table.contents = contents
       table.count = data.count
       this.setState({
-        table
+        table,
+        current_page: page
       })
     })
   }

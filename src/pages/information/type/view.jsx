@@ -75,7 +75,7 @@ class InformationTypeEdit extends React.Component {
 
 export default function renderView(page) {
 
-  const {table, selectedRowKeys, filter, showEdit, editItem} = page.state
+  const {table, selectedRowKeys, filter, showEdit, editItem, current_page} = page.state
   const {showFilter} = page.props
   const columnRenderObj = {
     buttons: (content, record, rowIndex) => {
@@ -110,7 +110,8 @@ export default function renderView(page) {
           <span className='white'>新建</span>
         </Button>
       </div>
-      <CusPCTable columnRenderObj={columnRenderObj} chart={table}/>
+      <CusPCTable columnRenderObj={columnRenderObj} chart={table} current_page={current_page}
+                  onChangePage={_page => page.onChangePage(_page)}/>
     </div>
 
   </div>

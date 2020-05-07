@@ -16,8 +16,8 @@ import utils from "../../../common/utils";
 
 export const INFORMATION_STATUS = [
   {title: '全部', key: 'all'},
-  {title: '下架中', key: 'off'},
-  {title: '上架中', key: 'on'},
+  {title: '下架中', key: 'down'},
+  {title: '上架中', key: 'up'},
 ]
 
 let sections = [
@@ -104,6 +104,7 @@ class List extends Page {
     console.log('filter', filter)
     var param = {
       label: filter.information_type === 'all' ? null : filter.information_type,
+      status: filter.status === 'all' ? null : filter.status,
       publish_time__gte: filter.startRange && filter.startRange.format('YYYY-MM-DD'),
       publish_time__lte: filter.endRange && filter.endRange.format('YYYY-MM-DD'),
       page
@@ -120,8 +121,8 @@ class List extends Page {
           {data: [{text: item.shares}]},
           {data: [{text: item.reads}]},
           {data: [{text: item.status}]},
-          {home: item.main_page, status: item.status === '上架中' ? 'on' : 'off'},
-          {id: item.id, status: item.status === '上架中' ? 'on' : 'off'}
+          {home: item.main_page, id: item.id, status: item.status === '上架中' ? 'up' : 'down'},
+          {id: item.id, status: item.status === '上架中' ? 'up' : 'down'}
         ])
       }
       let {table} = this.state
@@ -184,7 +185,9 @@ class List extends Page {
   handleSizeChange = (e) => {
     var {filter} = this.state
     filter.status = e.target.value
-    this.setState({filter});
+    this.setState({filter}, () => {
+      this.search()
+    });
   }
 
   onChangeDate(date) {
@@ -241,8 +244,8 @@ class List extends Page {
 
   }
 
-  onChangeSwitch(e, index) {
-    console.log(e, index)
+  onChangeSwitch(e, id) {
+    this.editItems(id, 'main_page', e)
   }
 
   search() {

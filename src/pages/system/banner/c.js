@@ -96,13 +96,14 @@ class List extends Page {
     this.initColumns()
   }
 
-  initColumns() {
+  initColumns(page) {
     let {filter} = this.state
     console.log('filter', filter)
     var param = {
       title: filter.title,
       position: filter.position === 'all' ? undefined : filter.position,
-      status: filter.status === 'all' ? undefined : filter.status
+      status: filter.status === 'all' ? undefined : filter.status,
+      page
     }
 
     var contents = []
@@ -122,7 +123,8 @@ class List extends Page {
       table.contents = contents
       table.count = data.count
       this.setState({
-        table
+        table,
+        current_page:page
       })
     })
   }
@@ -217,6 +219,19 @@ class List extends Page {
     this.initColumns()
   }
 
+  reset() {
+    this.setState({
+      filter: {
+        status: 'all',
+        startRange: null,
+        endRange: null,
+        title: null,
+        position: undefined
+      }
+    }, () => {
+      this.search()
+    })
+  }
   editItems(id, key, value) {
     var ids = []
     if (Array.isArray(id)) {
