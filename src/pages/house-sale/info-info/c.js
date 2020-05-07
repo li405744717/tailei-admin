@@ -10,7 +10,7 @@ import PropTypes from 'prop-types'
 import wx from '@/common/wx'
 import renderView from "./view";
 import Page from "../../basic/page/Page";
-
+import saleAPI from '@/commAction/sale'
 
 class ListInfo extends Page {
   static propTypes = {}
@@ -51,7 +51,32 @@ class ListInfo extends Page {
   }
 
   onLoad(props) {
+    let options = props.match.params
+    this.code = options.code
+    this.htmlParam = {};
+    this.props.location.search.replace(/([^?&=]+)=([^&]+)/g, (_, k, v) => this.htmlParam[k] = v);
 
+    var param = {
+      id: this.code
+    }
+    saleAPI.sale_info(param).then(data => {
+      var item = data.data
+      this.setState({
+        form: {
+          name: item.publisher || '--',
+          phone: item.contact,
+          address: item.address,// + ' ' + 'XX花园 1单元-1号楼-302室',
+          house_type: item.rent_type,
+          house_intro: item.room_type,//'两室一厅',
+          area: item.area + '平',
+          floor: item.floor + '层',
+          direction: item.direction,
+          pay_way: item.pay_way,
+          renovation_way: item.furniture,
+          images: item.photos
+        }
+      })
+    })
   }
 
 

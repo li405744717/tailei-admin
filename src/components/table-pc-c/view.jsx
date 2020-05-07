@@ -6,7 +6,7 @@ import {Table} from 'antd'
 
 export default function renderView(page) {
   const {hideFg, explain, explainTop, left, showAll} = page.state
-  var {chart, columnRenderObj, emptyText, rowSelection, pageObj, needBottom} = page.props
+  var {chart, columnRenderObj, emptyText, rowSelection, pageObj, needBottom, current_page} = page.props
   var {showHeader} = page.props
   const slotKeys = ['before', 'title_before', 'middle', 'after', "title_after", "tag"]
   var slotObj = filter.formatSlot(slotKeys, page)
@@ -142,7 +142,7 @@ export default function renderView(page) {
       <span className="text_24 gray margin_top_20">您可以新建数据或者看看其他信息</span>
     </div>
   }
-  var current_page = 1, total_count = chart && chart.count || 0
+  var total_count = chart && chart.count || 0
   let pagination = pageObj ? {
     defaultPageSize: 15,
     current: Number(current_page),
@@ -171,6 +171,7 @@ export default function renderView(page) {
                          onMouseLeave: event => page.onRow("onMouseLeave", {})
                        };
                      }}
+                     onChange={page.handleTableChange}
                      pagination={pagination}
                      rowSelection={rowSelection}
                      showHeader={showHeader}/> : null

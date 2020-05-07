@@ -25,6 +25,7 @@ class HouseSaleInfoEdit extends React.Component {
       cause: null
     }
   }
+
   UNSAFE_componentWillReceiveProps(newVal, newContext) {
     this.onLoad(newVal)
   }
@@ -41,6 +42,7 @@ class HouseSaleInfoEdit extends React.Component {
       form
     })
   }
+
   onChangeSelect = (value) => {
     var {form} = this.state
     form.status = value
@@ -93,7 +95,7 @@ class HouseSaleInfoEdit extends React.Component {
 export default function renderView(page) {
 
   const {user} = page.props
-  const {table, selectedRowKeys, filter, showEdit, editItem} = page.state
+  const {table, selectedRowKeys, filter, showEdit, editItem, current_page} = page.state
   const {showFilter} = page.props
   const columnRenderObj = {
     buttons: (content, record, rowIndex) => {
@@ -129,11 +131,13 @@ export default function renderView(page) {
       <div className='flex_row align_center'>
         <div className='flex_row align_center flex_1'>
           <span>姓名：</span>
-          <Input value={filter.name} placeholder='请输入' onChange={e => page.onChangeInput(e, 'name')} className='house_sale_input_view'/>
+          <Input value={filter.name} placeholder='请输入' onChange={e => page.onChangeInput(e, 'name')}
+                 className='house_sale_input_view'/>
         </div>
         <div className='flex_row align_center flex_1'>
           <span>电话：</span>
-          <Input value={filter.phone} placeholder='请输入' onChange={e => page.onChangeInput(e, 'phone')} className='house_sale_input_view'/>
+          <Input value={filter.phone} placeholder='请输入' onChange={e => page.onChangeInput(e, 'phone')}
+                 className='house_sale_input_view'/>
         </div>
         {
           !showFilter ?
@@ -220,7 +224,9 @@ export default function renderView(page) {
               className='primary'>清空</span></Button>
           </div> : null
       }
-      <CusPCTable rowSelection={rowSelection} columnRenderObj={columnRenderObj} chart={table}/>
+      <CusPCTable rowSelection={rowSelection} columnRenderObj={columnRenderObj} chart={table}
+                  current_page={current_page}
+                  onChangePage={_page => page.onChangePage(_page)}/>
     </div>
 
   </div>

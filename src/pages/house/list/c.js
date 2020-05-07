@@ -66,8 +66,8 @@ class List extends Page {
     table: {
       sections: sections,
       contents: []
-
     },
+    current_page: 1,
     filter: {
       house_type: 'all',
       status: 'all',
@@ -100,7 +100,7 @@ class List extends Page {
     this.initColumns()
   }
 
-  initColumns() {
+  initColumns(page) {
 
 
     let {filter} = this.state
@@ -109,9 +109,11 @@ class List extends Page {
     var param = {
       house_type: filter.house_type === 'all' ? undefined : filter.source,
       startArea: null,
-      area: areaRange,
+      area__gte: filter.startArea,
+      area__lte: filter.endArea,
       owner: filter.name,
       contact: filter.phone,
+      page: page
     }
     console.log(param)
     var contents = []
@@ -132,7 +134,8 @@ class List extends Page {
       table.contents = contents
       table.count = data.count
       this.setState({
-        table
+        table,
+        current_page: page || 1
       })
     })
   }

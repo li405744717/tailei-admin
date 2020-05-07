@@ -14,6 +14,18 @@ export default {
       return err;
     });
   },
+  information_edit(params) {
+    let url = RequestURL + 'material/material/admin_passage_update/'
+    var param = {
+      action: 'UPDATE',
+      ...params
+    }
+    return request.post(url, param).then(data => {
+      return data;
+    }).catch(err => {
+      return err;
+    });
+  },
   information_create(params) {
     let url = RequestURL + 'material/material/admin_passage_create/'
     return request.post(url, params).then(data => {

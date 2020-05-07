@@ -5,7 +5,7 @@ import React from 'react'
 import "./view.scss"
 import {Button, Icon, Checkbox, Input, Radio, DatePicker, Select, Modal} from "antd";
 import CusPCTable from "../../../components/table-pc-c/c";
-import {REPAIR_MAN, REPAIR_STATUS} from '@/pages/repair/list/c'
+import {REPAIR_STATUS} from '@/pages/repair/list/c'
 import PropTypes from "prop-types";
 
 const {Option} = Select;
@@ -14,10 +14,13 @@ const {RangePicker} = DatePicker;
 
 class RepairListEdit extends React.Component {
   static propTypes = {
-    editItem: PropTypes.array
+    editItem: PropTypes.array,
+    repair_man: PropTypes.array
   }
 
-  static defaultProps = {}
+  static defaultProps = {
+    repair_man: []
+  }
 
   state = {}
 
@@ -41,7 +44,7 @@ class RepairListEdit extends React.Component {
   }
 
   render() {
-    const {editItem} = this.props
+    const {editItem, repair_man} = this.props
     const {form} = this.state
     return editItem ? <div className='flex_column center'>
       <div>
@@ -55,7 +58,7 @@ class RepairListEdit extends React.Component {
             showSearch
             value={form.status}
             style={{width: 240}}
-            placeholder="全部小区"
+            placeholder="请选择"
             optionFilterProp="children"
             onChange={(e) => this.onChangeSelect(e, 'status')}
             filterOption={(input, option) => {
@@ -76,7 +79,7 @@ class RepairListEdit extends React.Component {
             showSearch
             value={form.repair_man_id}
             style={{width: 240}}
-            placeholder="全部小区"
+            placeholder="请选择"
             optionFilterProp="children"
             onChange={(e) => this.onChangeSelect(e, 'repair_man_id')}
             filterOption={(input, option) => {
@@ -84,7 +87,7 @@ class RepairListEdit extends React.Component {
             }}
           >
             {
-              REPAIR_MAN.map((item, index) => {
+              repair_man.map((item, index) => {
                 return <Option key={`option_${index}`} value={item.key}>{item.title}</Option>
               })
             }
@@ -99,7 +102,7 @@ class RepairListEdit extends React.Component {
 export default function renderView(page) {
 
   const {user} = page.props
-  const {table, selectedRowKeys, filter, showEdit, editItem, uploadToast,repair_man_list} = page.state
+  const {table, selectedRowKeys, filter, showEdit, editItem, uploadToast, repair_man_list, current_page} = page.state
   const {showFilter} = page.props
   const columnRenderObj = {
     buttons: (content, record, rowIndex) => {
@@ -128,7 +131,7 @@ export default function renderView(page) {
       width={480}
       okText={'保存'}
       closable={true}>
-      <RepairListEdit ref={'houseEdit'} editItem={editItem}/>
+      <RepairListEdit ref={'houseEdit'} editItem={editItem} repair_man={repair_man_list}/>
     </Modal>
 
 
@@ -185,7 +188,8 @@ export default function renderView(page) {
               className='primary'>清空</span></Button>
           </div> : null
       }
-      <CusPCTable columnRenderObj={columnRenderObj} chart={table}/>
+      <CusPCTable columnRenderObj={columnRenderObj} chart={table} current_page={current_page}
+                  onChangePage={_page => page.onChangePage(_page)}/>
     </div>
 
   </div>

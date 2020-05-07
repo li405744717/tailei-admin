@@ -105,7 +105,7 @@ class List extends Page {
     })
   }
 
-  initColumns() {
+  initColumns(page) {
 
     let {filter} = this.state
     console.log('filter', filter)
@@ -114,6 +114,7 @@ class List extends Page {
     })
     var param = {
       contact: filter.phone,
+      page
     }
     if (status_item) {
       param.repair_status = status_item.title
@@ -130,7 +131,7 @@ class List extends Page {
           {
             data: [{text: item.repair_status}, {text: item.worker}],
             status: item.repair_status === '待处理' ? 'distribute' : 'repairing',
-            repair_man_id: 1
+            repair_man_id: undefined
           },
           {data: [{text: item.charge_status}, {text: item.repair_free || '--'}]},
           {id: 1}
@@ -140,7 +141,8 @@ class List extends Page {
       table.contents = contents
       table.count = data.count
       this.setState({
-        table
+        table,
+        current_page: page
       })
     })
   }

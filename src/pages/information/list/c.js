@@ -98,13 +98,15 @@ class List extends Page {
     this.initInformationType()
   }
 
-  initColumns() {
+  initColumns(page) {
 
     let {filter} = this.state
     console.log('filter', filter)
     var param = {
-      name: filter.name,
-      role: filter.role === 'all' ? undefined : filter.role
+      label: filter.information_type === 'all' ? null : filter.information_type,
+      publish_time__gte: filter.startRange && filter.startRange.format('YYYY-MM-DD'),
+      publish_time__lte: filter.endRange && filter.endRange.format('YYYY-MM-DD'),
+      page
     }
 
     var contents = []
@@ -126,16 +128,17 @@ class List extends Page {
       table.contents = contents
       table.count = data.count
       this.setState({
-        table
+        table,
+        current_page: page
       })
     })
   }
 
   initInformationType() {
     informationAPI.information_type_list({}).then(data => {
-      var contents = []
+      var contents = [{title: '全部', key: 'all'}]
       for (var item of data.data) {
-        contents.push({title: item.name, key: item.id})
+        contents.push({title: item.name, key: item.name})
       }
       this.setState({
         informationTypes: contents
@@ -281,9 +284,9 @@ class List extends Page {
     }
     var api
     if (value === 'delete') {
-      api = (param) => informationAPI.sale_delete(param)
+      api = (param) => informationAPI.information_delete(param)
     } else {
-      api = (param) => informationAPI.sale_edit(param)
+      api = (param) => informationAPI.information_edit(param)
     }
     api(param).then(data => {
       utils.showToast('操作成功')

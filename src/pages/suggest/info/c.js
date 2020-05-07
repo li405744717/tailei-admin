@@ -97,73 +97,41 @@ class List extends Page {
     this.initColumns()
   }
 
-  initColumns() {
+  initColumns(page) {
     let {filter} = this.state
     console.log('filter', filter)
     var param = {
       name: filter.name,
-      role: filter.role === 'all' ? undefined : filter.role
+      contact: filter.phone,
+      page
     }
 
     var contents = []
     suggestAPI.suggest_list(param).then(data => {
       for (var item of data.data) {
         contents.push([
-          {data: [{text: '1'}]},
-          {data: [{text: 'XX'}]},
-          {data: [{text: '134****1234'}]},
-          {data: [{text: '聊城-冠县-XX街道'}]},
-          {data: [{text: 'XX花园'}]},
-          {data: [{text: '1单元-1号楼-302室'}]},
-          {data: [{text: '2020-02-26  16:32:42'}]},
-          {id: 1}
+          {data: [{text: item.id}]},
+          {data: [{text: item.name}]},
+          {data: [{text: item.contact}]},
+          {data: [{text: item.city}]},
+          {data: [{text: item.court}]},
+          {data: [{text: item.house}]},
+          {data: [{text: item.create_time}]},
+          {id: item.id}
         ])
       }
       let {table} = this.state
       table.contents = contents
       table.count = data.count
       this.setState({
-        table
+        table,
+        current_page: page
       })
     })
+  }
 
-    var contents = [
-      [
-        {data: [{text: '1'}]},
-        {data: [{text: 'XX'}]},
-        {data: [{text: '134****1234'}]},
-        {data: [{text: '聊城-冠县-XX街道'}]},
-        {data: [{text: 'XX花园'}]},
-        {data: [{text: '1单元-1号楼-302室'}]},
-        {data: [{text: '2020-02-26  16:32:42'}]},
-        {id: 1}
-      ],
-      [
-        {data: [{text: '1'}]},
-        {data: [{text: 'XX'}]},
-        {data: [{text: '134****1234'}]},
-        {data: [{text: '聊城-冠县-XX街道'}]},
-        {data: [{text: 'XX花园'}]},
-        {data: [{text: '1单元-1号楼-302室'}]},
-        {data: [{text: '2020-02-26  16:32:42'}]},
-        {id: 2}
-      ],
-      [
-        {data: [{text: '1'}]},
-        {data: [{text: 'XX'}]},
-        {data: [{text: '134****1234'}]},
-        {data: [{text: '聊城-冠县-XX街道'}]},
-        {data: [{text: 'XX花园'}]},
-        {data: [{text: '1单元-1号楼-302室'}]},
-        {data: [{text: '2020-02-26  16:32:42'}]},
-        {id: 3}
-      ]
-    ]
-    let {table} = this.state
-    table.contents = contents
-    this.setState({
-      table
-    })
+  initCourtList() {
+
   }
 
   render() {
@@ -245,6 +213,26 @@ class List extends Page {
       showEdit: flag
     })
   }
+
+  search() {
+    this.initColumns()
+  }
+
+
+  reset() {
+    this.setState({
+      filter: {
+        apartment: undefined,
+        startRange: null,
+        endRange: null,
+        name: null,
+        phone: null,
+      }
+    }, () => {
+      this.search()
+    })
+  }
+
 }
 
 

@@ -37,5 +37,13 @@ export default {
     }).catch(err => {
       return err;
     });
+  },
+  sale_info(params) {
+    let url = RequestURL + 'house/house/admin_rent_retrieve/'
+    return request.get(url, params).then(data => {
+      return data;
+    }).catch(err => {
+      return err;
+    });
   }
 }

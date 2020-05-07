@@ -5,6 +5,10 @@ import * as React from 'react';
 import App from "@/app";
 
 export default class Page extends React.Component {
+  state = {
+    current_page: 1,
+  }
+
   constructor(props, state) {
     super(props, state);
     if (App.APP && props.match) {
@@ -16,5 +20,9 @@ export default class Page extends React.Component {
     if (App.APP && newProps.match) {
       App.APP.setParams(newProps.match.path, newProps.match.params, newProps.location.search)
     }
+  }
+
+  onChangePage(page) {
+    this.initColumns(page)
   }
 }

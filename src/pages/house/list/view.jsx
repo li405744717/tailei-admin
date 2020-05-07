@@ -81,7 +81,7 @@ class HouseListEdit extends React.Component {
 export default function renderView(page) {
 
   const {user} = page.props
-  const {table, selectedRowKeys, filter, showEdit, editItem, uploadToast} = page.state
+  const {table, selectedRowKeys, filter, showEdit, editItem, uploadToast, current_page} = page.state
   const {showFilter} = page.props
   const columnRenderObj = {
     buttons: (content, record, rowIndex) => {
@@ -239,7 +239,8 @@ export default function renderView(page) {
               className='primary'>清空</span></Button>
           </div> : null
       }
-      <CusPCTable columnRenderObj={columnRenderObj} chart={table}/>
+      <CusPCTable columnRenderObj={columnRenderObj} chart={table} current_page={current_page}
+                  onChangePage={_page => page.onChangePage(_page)}/>
     </div>
 
   </div>

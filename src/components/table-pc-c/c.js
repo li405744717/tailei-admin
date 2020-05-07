@@ -19,7 +19,8 @@ class CusPCTable extends React.Component {
     showHeader: true,
     emptyText: '这里什么都没有',
     pageObj: true,
-    needBottom: true
+    needBottom: true,
+    current_page:1
   }
   static propTypes = {
     chart: PropTypes.object.isRequired, //菜单,数据,显示顺序
@@ -32,6 +33,8 @@ class CusPCTable extends React.Component {
     rowSelection: PropTypes.object,
     pageObj: PropTypes.bool,
     needBottom: PropTypes.bool,
+    onChangePage: PropTypes.func,
+    current_page: PropTypes.number
   }
   state = {
     hideFg: false,
@@ -130,6 +133,18 @@ class CusPCTable extends React.Component {
         return;
       default:
         return;
+    }
+  }
+  handleTableChange = (pagination, filters, sorter) => {
+    let {current_page, ordering, columns} = this.state
+    current_page = parseInt(current_page)
+    let page;
+    if (pagination.current) {
+      page = pagination.current;
+    }
+
+    if (page !== current_page) { //其他页
+      if (this.props.onChangePage) this.props.onChangePage(page)
     }
   }
 }

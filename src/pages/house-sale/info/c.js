@@ -96,7 +96,7 @@ class List extends Page {
     this.initColumns()
   }
 
-  initColumns() {
+  initColumns(page) {
     let {filter} = this.state
     console.log('filter', filter)
 
@@ -106,8 +106,10 @@ class List extends Page {
       contact: filter.phone,
       rent_type: filter.house_type === 'all' ? undefined : filter.house_type,
       consultant: filter.consultant,
-      status: filter.status === 'all' ? undefined : filter.status,
-      // publish_time: timeRange
+      publish_status: filter.status === 'all' ? undefined : filter.status,
+      publish_time__gte: filter.startRange && filter.startRange.format('YYYY-MM-DD'),
+      publish_time__lte: filter.endRange && filter.endRange.format('YYYY-MM-DD'),
+      page: page
     }
 
     var contents = []
@@ -119,15 +121,19 @@ class List extends Page {
           {data: [{text: item.address}, {text: '--'}]},
           {data: [{text: item.rent_type}]},
           {data: [{text: item.publish_time}]},
-          {data: [{text: item.status}]},
-          {status: item.status === '已发布' ? 'published' : item.status === '待审核' ? 'uncensored' : 'rejected', id: item.id}
+          {data: [{text: item.publish_status}]},
+          {
+            status: item.publish_status === '已发布' ? 'published' : item.publish_status === '待审核' ? 'uncensored' : 'rejected',
+            id: item.id
+          }
         ])
       }
       let {table} = this.state
       table.contents = contents
       table.count = data.count
       this.setState({
-        table
+        table,
+        current_page: page || 1
       })
     })
   }
@@ -223,7 +229,7 @@ class List extends Page {
   reset() {
     this.setState({
       filter: {
-        status: undefined,
+        status: 'all',
         startRange: null,
         endRange: null,
         name: null,
