@@ -78,7 +78,7 @@ class Login extends React.Component {
         // 登陆成功之后的跳转
         this.props.history.replace(RedirectUrl + RedirectUrlSearch)
       } else {
-        this.props.history.replace('/')
+        this.props.history.replace('/home/house-sale/list')
       }
     }
   }
