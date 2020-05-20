@@ -97,7 +97,7 @@ class List extends Page {
     }
 
     var contents = []
-    saleAPI.sale_list(param).then(data => {
+    saleAPI.sale_list_list(param).then(data => {
       for (var item of data.data) {
         contents.push([
           {data: [{text: item.id}]},

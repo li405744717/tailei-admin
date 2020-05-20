@@ -464,16 +464,17 @@ export default function renderView(page) {
                 <span className='cus_form_title_text text_28 margin_top_8'>{item.title}：</span>
                 {
                   item.type === 'input' ?
-                    <FormInput placeholder={item.placeholder || `请输入${item.title}`}
+                    <FormInput value={item.value} placeholder={item.placeholder || `请输入${item.title}`}
                                setInputValue={value => page.setFormValue(item.key, value)}/> :
                     item.type === 'radio' ?
-                      <FormRadio options={item.options}
+                      <FormRadio value={item.value} options={item.options}
                                  setInputValue={value => page.setFormValue(item.key, value)}/> :
                       item.type === 'select' ?
-                        <FormSelect options={item.options}
+                        <FormSelect value={item.value} options={item.options}
                                     setInputValue={value => page.setFormValue(item.key, value)}/> :
                         item.type === 'images' ?
-                          <FormImage setInputValue={value => page.setFormValue(item.key, value)}/> : null
+                          <FormImage value={item.value}
+                                     setInputValue={value => page.setFormValue(item.key, value)}/> : null
                 }
               </div>
 

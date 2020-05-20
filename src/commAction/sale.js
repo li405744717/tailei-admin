@@ -6,6 +6,14 @@ var RequestURL = Config.REQUEST_URL
 
 
 export default {
+  sale_list_list(params){
+    let url = RequestURL + 'house/house/admin_on_rent_list/'
+    return request.get(url, params).then(data => {
+      return data;
+    }).catch(err => {
+      return err;
+    });
+  },
   sale_list(params) {
     let url = RequestURL + 'house/house/admin_rent_list/'
     return request.get(url, params).then(data => {
