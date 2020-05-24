@@ -2,6 +2,7 @@ import VConsole from 'vconsole'
 
 let Config = {
   REQUEST_URL: 'https://xinyuanwuye.cn/api/',
+  UPLOAD_URL:'https://xinyuanwuye.cn/api/upload_image/',
   dev: true,
   env: 'devkb', //后台域名 devkb | kb
   TIMEOUT: 60000,
