@@ -10,7 +10,7 @@ import PropTypes from 'prop-types'
 import wx from '@/common/wx'
 import renderView from "./view";
 import Page from "../../basic/page/Page";
-
+import systemAPI from '@/commAction/system'
 
 class ListInfo extends Page {
   static propTypes = {}
@@ -21,6 +21,7 @@ class ListInfo extends Page {
     username: '',
     password: '',
 
+    consultants: [],
     form: [
       {title: '标题', type: 'input', key: 'title'},
       {
@@ -46,9 +47,7 @@ class ListInfo extends Page {
       {
         title: '顾问', type: 'select', key: 'adviser',
         options: [
-          {title: '住宅/居民楼', key: 'zhuzhai'},
-          {title: '办公楼/写字楼/商铺', key: 'bangonglou'},
-          {title: '停车位', key: 'car'}
+
         ]
       },
       {title: '房屋详细图片', type: 'images', key: 'images'}
@@ -72,11 +71,29 @@ class ListInfo extends Page {
 
   onLoad(props) {
 
+    this.initConsultant()
   }
 
 
   render() {
     return renderView(this)
+  }
+
+  initConsultant() {
+    var param = {
+      role: 'consultant'
+    }
+    systemAPI.account_list(param).then(data => {
+      var contents = []
+      var {form} = this.state
+      for (var item of data.data) {
+        contents.push({title: item.name, key: item.id})
+      }
+      form[12].options = contents
+      this.setState({
+        form
+      })
+    })
   }
 
   setFormValue(key, value) {
