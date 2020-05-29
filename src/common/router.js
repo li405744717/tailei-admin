@@ -132,7 +132,7 @@ export const routerList = [
     path: '/home/repair',
     children: [
       {
-        title: '家具报修',
+        title: '家具维修',
         path: '/home/repair/list',
         C: RepairList
       },
