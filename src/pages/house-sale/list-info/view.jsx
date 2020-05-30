@@ -440,7 +440,7 @@ export class FormEdit extends React.Component {
       // 本地图片上传：写啥无所谓，反正customUploadImg()方法重写了
 
       this.editor.customConfig.uploadImgServer = Config.UPLOAD_URL   //上传图片
-
+      this.editor.customConfig.uploadFileName = 'file'  //上传参数 自定义
       let user = store.getState().user
       var token = user.token
       this.editor.customConfig.uploadImgHeaders = {
@@ -478,7 +478,7 @@ export class FormEdit extends React.Component {
           // 图片上传并返回结果，自定义插入图片的事件（而不是编辑器自动插入图片！！！）
           // insertImg 是插入图片的函数，editor 是编辑器对象，result 是服务器端返回的结果
           // 举例：假如上传图片成功后，服务器端返回的是 {url:'....'} 这种格式，即可这样插入图片：
-          var url = result.url
+          var url = result.link
           insertImg(url)
           // result 必须是一个 JSON 格式字符串！！！否则报错
         }
