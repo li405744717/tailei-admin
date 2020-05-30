@@ -97,12 +97,16 @@ class InformationInfo extends Page {
     if (this.refs && this.refs.edit) {
       // console.log('this.refs && this.refs.edit', this.refs.edit.editor.txt.html())
     }
+    var image_paths = (form[2].value || []).map(item => {
+      return item.response.link
+    }) || []
     var param = {
       title: form[0].value,
       label_id: parseInt(form[1].value),
+      cover: image_paths[0],
       content: `${edit.editor.txt.html()}`
     }
-    console.log('param', param)
+    // console.log('param', param)
     informationAPI.information_create(param).then(data => {
       utils.showToast(data.detail)
     }).catch(e => {

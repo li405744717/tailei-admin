@@ -258,10 +258,13 @@ export class FormImage extends React.Component {
         <div className="ant-upload-text">上传图片</div>
       </div>
     );
+    let user = store.getState().user
+    var token = user.token
     return <div>
       <div className="clearfix">
         <Upload
-          action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+          action={Config.UPLOAD_URL}
+          headers={{'Authorization': 'Token ' + token}}
           listType="picture-card"
           fileList={fileList}
           onPreview={this.handlePreview}
