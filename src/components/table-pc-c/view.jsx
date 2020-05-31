@@ -97,19 +97,15 @@ export default function renderView(page) {
             {
               content.data.map((data, itemIndex) => {
                 var len = content.data.length
-                return <div className={`flex_row align_center`}
-                            key={"item" + itemIndex}>
+                return <div className={`flex_row align_center`} key={"item" + itemIndex}>
                   {
                     data.preImageUrl ?
-                      <img src={data.preImageUrl}
-                           className={`${data.preImageClass} margin_right_8`}/> : null
+                      <img src={data.preImageUrl} className={`${data.preImageClass} margin_right_8`}/> : null
                   }
-                  <span
-                    className={`text_28 black ${data.styleClass}`}>{data.text}</span>
+                  <span className={`text_28 black ${data.styleClass}`}>{data.text}</span>
                   {
                     data.nextImageUrl ?
-                      <img src={data.nexteImageUrl}
-                           className={`${data.nextImageClass} margin_left_8`}/> : null
+                      <img src={data.nexteImageUrl} className={`${data.nextImageClass} margin_left_8`}/> : null
                   }
                 </div>
               })

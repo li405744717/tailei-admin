@@ -142,7 +142,7 @@ class List extends Page {
       table.count = data.count
       this.setState({
         table,
-        current_page: page
+        current_page: page || 1
       })
     })
   }
