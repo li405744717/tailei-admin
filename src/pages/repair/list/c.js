@@ -114,23 +114,32 @@ class List extends Page {
     })
     var param = {
       contact: filter.phone,
+      worker_id: filter.repair_man_id,
+      status: filter.status === 'all' ? null : filter.status,
       page
     }
     if (status_item) {
-      param.repair_status = status_item.title
+      // param.status = status_item.title
     }
 
     var contents = []
     repairAPI.repair_list(param).then(data => {
+      var repari_status_map = {
+        '待分配': 'dispatch',
+        '待处理': 'wait',
+        '待支付': 'unpaid',
+        '暂无法维修': 'pend',
+        '完成': 'done',
+      }
       for (var item of data.data) {
         contents.push([
           {data: [{text: '1'}]},
           {data: [{text: item.name}, {text: item.contact}]},
-          {data: [{text: item.address}, {text: '-'}]},
+          {data: [{text: item.address}, {text: '--'}]},
           {data: [{text: item.reserve_time || '--'}, {text: item.order_time || '--'}]},
           {
-            data: [{text: item.repair_status}, {text: item.worker}],
-            status: item.repair_status === '待处理' ? 'distribute' : 'repairing',
+            data: [{text: item.repair_status}, {text: item.worker.worker || '--'}],
+            status: repari_status_map[item.repair_status],
             repair_man_id: undefined
           },
           {data: [{text: item.charge_status}, {text: item.repair_free || '--'}]},
@@ -198,7 +207,7 @@ class List extends Page {
     var {filter} = this.state
     filter.repair_man_id = value
     this.setState({filter}, () => {
-      this.search()
+      // this.search()
     });
   }
 

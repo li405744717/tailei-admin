@@ -174,9 +174,10 @@ export default function renderView(page) {
         <div className='flex_1'/>
         <Radio.Group value={filter.status} onChange={page.handleSizeChange}>
           <Radio.Button value="all">全部</Radio.Button>
-          <Radio.Button value="distribute">待分配</Radio.Button>
-          <Radio.Button value="repairing">待维修</Radio.Button>
-          <Radio.Button value="complete">已维修</Radio.Button>
+          <Radio.Button value="dispatch">待分配</Radio.Button>
+          <Radio.Button value="wait">待维修</Radio.Button>
+          <Radio.Button value="pend">暂无法维修</Radio.Button>
+          <Radio.Button value="done">已维修</Radio.Button>
         </Radio.Group>
       </div>
       {
