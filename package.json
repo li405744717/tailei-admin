@@ -16,7 +16,7 @@
     "jspdf": "^1.5.3",
     "less": "^3.10.3",
     "less-loader": "^5.0.0",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.19",
     "moment": "^2.24.0",
     "orgchart": "^2.1.10",
     "prop-types": "^15.7.2",
